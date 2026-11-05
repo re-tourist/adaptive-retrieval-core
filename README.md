@@ -90,3 +90,42 @@ uv run --no-sync python -m arc.evaluation.hybrid --dataset scifact --data data/o
 ```
 
 WANDS 使用自己的数据目录与 E1/E2 快照。E3 固定使用 RRF k=60，E4 仅重排 E3 前 50 项并保留原尾部。E4 Runfile 中的分数按名次编码，以保持标准 TREC 排序语义。MiniLM logits 只用于决定前 50 项的顺序。用 M1 的 `arc.evaluation.comparison` 追加两份 E3/E4 test Runfile 即可生成四策略配对 Bootstrap 和 WANDS 争议标签敏感性分析。
+
+### M3 检索服务与演示
+
+```sh
+uv sync --locked --group sparse --group harness --group harness-test
+uv run --no-sync arc search "BM25" --top-k 1 --trace
+uv run --no-sync arc serve --host 127.0.0.1 --port 8000
+```
+
+默认使用三个内置演示实体和真实 BM25。浏览 `/docs` 可试用 OpenAPI，`GET /healthz` 返回可用策略与快照。向 `POST /search` 发送 JSON，例如：
+
+```json
+{"query":"BM25","domain":"technical","strategy_id":"bm25","top_k":1,"return_level":"unit","trace_level":"summary"}
+```
+
+`filters.entity_ids` 是硬过滤白名单，在确定候选时生效。空白名单返回空结果，未知过滤字段返回 422。可通过 `snapshot_id` 锁定快照，失配返回 409。请求只接受 `technical` / `product`，并在配置域内检索。默认返回实体级结果，`return_level: "unit"` 附加 Unit ID 和位置。Trace 摘要给出阶段时延和候选数，不包含查询正文、标签或内部 logits。E4 的公开分数为排名编码。
+
+加载正式语料时，设置以下环境变量后运行同一命令：
+
+| 变量 | 作用 |
+|---|---|
+| `ARC_DATASET` | `scifact` 或 `wands`。省略时为 `demo`。 |
+| `ARC_DATA` | 对应官方数据目录。在线只读取 corpus JSONL 或 product TSV。 |
+| `ARC_BGE_MODEL` | 已校验 BGE 快照路径。与 Dense 索引同时设置后启用 Dense、Hybrid。 |
+| `ARC_DENSE_INDEX` | M1 产生的 E2 目录，含 `index.faiss`、`index_manifest.json` 和 `entity_ids.json`。只加载可信的本地快照。 |
+| `ARC_MINILM_MODEL` | 固定版本的 MiniLM 快照路径。与 Dense 一起配置后启用 Hybrid Rerank。 |
+| `ARC_DEVICE` | `cpu` 或 `cuda:0`。用 Dense 或 MiniLM 时安装 `--group dense` 并确认运行时。 |
+
+服务串行执行同一进程内的检索请求。只使用公开或获授权的语料，按本地评测和演示部署，无生产 ACL 和多租户隔离。性能脚本 `scripts/measure-harness.py --help` 使用固定 dev 查询、已冻结的 Runfile 和真实 HTTP 请求验证在线排名与硬过滤。
+
+Docker 演示镜像只包含 CPU BM25、Web 入口和内置演示语料：
+
+```sh
+docker build --tag arc:v0 .
+docker run --rm -p 127.0.0.1:8000:8000 arc:v0
+python scripts/container-smoke.py http://127.0.0.1:8000
+```
+
+数据、索引、模型、缓存和凭据都排除在镜像构建上下文之外。

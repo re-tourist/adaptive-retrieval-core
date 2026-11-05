@@ -18,6 +18,8 @@ MODEL_FILES = {
 
 
 class MiniLMReranker:
+    revision = MODEL_REVISION
+
     def __init__(self, model_path: Path, device: str, batch_size: int = 32) -> None:
         if model_path.name != MODEL_REVISION or batch_size < 1:
             raise ValueError("Expected pinned MiniLM snapshot and positive batch size")

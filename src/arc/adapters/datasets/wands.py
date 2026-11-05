@@ -4,6 +4,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from arc.adapters.datasets.common import Dataset, fingerprints, make_corpus, make_queries
+from arc.application.ports import Corpus
 
 _TEXT_FIELDS = (
     "product_name",
@@ -28,8 +29,7 @@ def _rows(path: Path, required: tuple[str, ...]) -> Iterator[dict[str, str]]:
             yield row
 
 
-def load_wands(root: Path) -> Dataset:
-    files = fingerprints(root, ("product.csv", "query.csv", "label.csv"))
+def _load_corpus(root: Path, files: dict[str, str]) -> tuple[Corpus, dict[str, int]]:
     empty_fields: Counter[str] = Counter(dict.fromkeys(_TEXT_FIELDS, 0))
 
     def products() -> Iterator[tuple[str, str, str]]:
@@ -41,12 +41,22 @@ def load_wands(root: Path) -> Dataset:
             yield row["product_id"], row["product_name"], text
 
     corpus = make_corpus("wands", "product", products(), {"product.csv": files["product.csv"]})
+    return corpus, dict(empty_fields)
+
+
+def load_wands_corpus(root: Path) -> Corpus:
+    return _load_corpus(root, fingerprints(root, ("product.csv",)))[0]
+
+
+def load_wands(root: Path) -> Dataset:
+    files = fingerprints(root, ("product.csv", "query.csv", "label.csv"))
+    corpus, empty_fields = _load_corpus(root, files)
     return Dataset(
         corpus,
         load_wands_queries(root),
         {"all": load_wands_labels(root)},
         files,
-        dict(empty_fields),
+        empty_fields,
     )
 
 

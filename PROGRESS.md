@@ -11,7 +11,7 @@
 | M0 | PASS | [Report](artifacts/acceptance/m0/report.md) · [Checks](artifacts/acceptance/m0/checks.json) | `7845e78180d7f1cbee486ec01d3e694af8fdc0d4` |
 | M1 | PASS | [Report](artifacts/acceptance/m1/report.md) · [Checks](artifacts/acceptance/m1/checks.json) | `141d634aa3cdf291371be95500293227f43e361d` |
 | M2 | PASS | [Report](artifacts/acceptance/m2/report.md) · [Checks](artifacts/acceptance/m2/checks.json) | `4419393c346b6aa3a551e2878c06812a765ba2a7` |
-| M3 | NOT_STARTED | — | — |
+| M3 | IN_PROGRESS | Public harness and Docker smoke implemented. Online parity and CI verification pending. | — |
 
 ## Next action
 

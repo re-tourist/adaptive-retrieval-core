@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -34,11 +35,22 @@ class Candidate:
     score: float
 
 
+TraceHook = Callable[[str, float, int], None]
+
+
 class Retriever(Protocol):
     @property
     def manifest(self) -> IndexManifest: ...
 
-    def retrieve(self, query: str, domain: str, limit: int) -> tuple[Candidate, ...]: ...
+    def retrieve(
+        self,
+        query: str,
+        domain: str,
+        limit: int,
+        *,
+        allowed_ids: frozenset[str] | None = None,
+        observe: TraceHook | None = None,
+    ) -> tuple[Candidate, ...]: ...
 
 
 @dataclass(frozen=True, slots=True)

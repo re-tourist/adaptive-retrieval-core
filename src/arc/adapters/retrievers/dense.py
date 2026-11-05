@@ -3,13 +3,14 @@ from dataclasses import asdict
 from hashlib import file_digest, sha256
 from importlib.metadata import version
 from pathlib import Path
+from time import perf_counter
 
 import faiss
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
-from arc.application.ports import Candidate, Corpus, IndexCompatibility, IndexManifest
+from arc.application.ports import Candidate, Corpus, IndexCompatibility, IndexManifest, TraceHook
 
 MODEL_ID = "BAAI/bge-small-en-v1.5"
 MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
@@ -136,16 +137,36 @@ class DenseRetriever:
                 raise ValueError("Saved dense index format or shape mismatch")
             self.document_truncations = meta["document_truncations"]
 
-    def retrieve(self, query: str, domain: str, limit: int) -> tuple[Candidate, ...]:
-        if domain != self.domain:
+    def retrieve(
+        self,
+        query: str,
+        domain: str,
+        limit: int,
+        *,
+        allowed_ids: frozenset[str] | None = None,
+        observe: TraceHook | None = None,
+    ) -> tuple[Candidate, ...]:
+        if domain != self.domain or allowed_ids == frozenset():
             return ()
+        started = perf_counter()
         vectors, truncated = self.encoder.encode([QUERY_PREFIX + query])
         self.query_truncations += truncated
-        scores, indices = self.index.search(vectors, min(limit + 1, len(self.units)))
-        if len(scores[0]) > limit and scores[0, limit - 1] == scores[0, limit]:
+        if observe is not None:
+            observe("query_encode", (perf_counter() - started) * 1000, 1)
+        started = perf_counter()
+        depth = len(self.units) if allowed_ids is not None else min(limit + 1, len(self.units))
+        scores, indices = self.index.search(vectors, depth)
+        if depth < len(self.units) and scores[0, limit - 1] == scores[0, limit]:
             scores, indices = self.index.search(vectors, len(self.units))
         ranked = sorted(
-            zip(indices[0], scores[0], strict=True),
+            (
+                (i, score)
+                for i, score in zip(indices[0], scores[0], strict=True)
+                if allowed_ids is None or self.units[i].entity_key.entity_id in allowed_ids
+            ),
             key=lambda pair: (-float(pair[1]), self.units[pair[0]].unit_id),
         )
-        return tuple(Candidate(self.units[i], float(score)) for i, score in ranked[:limit])
+        hits = tuple(Candidate(self.units[i], float(score)) for i, score in ranked[:limit])
+        if observe is not None:
+            observe("faiss_search", (perf_counter() - started) * 1000, len(hits))
+        return hits

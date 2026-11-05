@@ -9,8 +9,13 @@ description = "Benchmark-driven modular retrieval core"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 
+[project.scripts]
+arc = "arc.entrypoints.cli:main"
+
 [dependency-groups]
 dev = ["pytest>=8.4,<9", "ruff>=0.15.21,<0.16"]
+harness = ["fastapi==0.135.1", "uvicorn==0.42.0"]
+harness-test = ["httpx>=0.28,<0.29"]
 sparse = ["bm25s>=0.2.10,<0.3", "numpy>=2,<3"]
 dense = [
     "faiss-cpu>=1.10,<2",

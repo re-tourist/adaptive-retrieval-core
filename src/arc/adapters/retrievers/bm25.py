@@ -5,7 +5,7 @@ from importlib.metadata import version
 
 import bm25s
 
-from arc.application.ports import Candidate, Corpus, IndexCompatibility, IndexManifest
+from arc.application.ports import Candidate, Corpus, IndexCompatibility, IndexManifest, TraceHook
 
 _TOKEN = re.compile(r"[^\W_]+(?:-[^\W_]+)*")
 CONFIG = {
@@ -40,14 +40,27 @@ class BM25Retriever:
             config_hash,
         )
 
-    def retrieve(self, query: str, domain: str, limit: int) -> tuple[Candidate, ...]:
+    def retrieve(
+        self,
+        query: str,
+        domain: str,
+        limit: int,
+        *,
+        allowed_ids: frozenset[str] | None = None,
+        observe: TraceHook | None = None,
+    ) -> tuple[Candidate, ...]:
         if domain != self.domain:
+            return ()
+        eligible = [
+            i
+            for i, unit in enumerate(self.units)
+            if allowed_ids is None or unit.entity_key.entity_id in allowed_ids
+        ]
+        if not eligible:
             return ()
         tokens = tokenize(query)
         if not tokens:
-            return tuple(Candidate(unit, 0.0) for unit in self.units[:limit])
+            return tuple(Candidate(unit, 0.0) for unit in (self.units[i] for i in eligible[:limit]))
         scores = self.index.get_scores(tokens)
-        order = sorted(
-            range(len(self.units)), key=lambda i: (-float(scores[i]), self.units[i].unit_id)
-        )
+        order = sorted(eligible, key=lambda i: (-float(scores[i]), self.units[i].unit_id))
         return tuple(Candidate(self.units[i], float(scores[i])) for i in order[:limit])
