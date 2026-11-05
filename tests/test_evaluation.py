@@ -7,6 +7,7 @@ from arc.adapters.datasets.wands import load_wands
 from arc.evaluation.metrics import evaluate
 from arc.evaluation.qrels import audit_qrels, wands_split
 from arc.evaluation.runfile import RunRow, rank_scores, read_run, render_run
+from arc.evaluation.sensitivity import disputed_sensitivity
 
 ENTITIES = {"exact", "partial", "negative", "unjudged"}
 
@@ -112,3 +113,19 @@ def test_disputed_policy_requires_exact_conflict_set_and_grades() -> None:
     assert audit_qrels(rows[1:], {"q"}, ENTITIES, disputed=policy)[0] is None
     changed = [*rows, ("q", "partial", 2)]
     assert audit_qrels(changed, {"q"}, ENTITIES, disputed=policy)[0] is None
+
+
+def test_disputed_sensitivity_detects_direction_change() -> None:
+    qrels = {"q": {"exact": 1}}
+    ledger = [{"query_id": "q", "entity_id": "partial", "grades": [0, 2]}]
+    runs = {
+        "e1": (RunRow("q", "partial", 1, 1.0, "e1"),),
+        "e2": (RunRow("q", "exact", 1, 1.0, "e2"),),
+    }
+    result = disputed_sensitivity(runs, qrels, ENTITIES, ledger)["pairs"]["e2-e1"]
+    assert result["mean_paired_delta"]["main"] == 1
+    low, high = result["mixed_endpoint_delta_bounds"]
+    assert low == pytest.approx(-2 / (3 + 1 / log2(3)))
+    assert high == 1
+    assert result["direction_strictly_stable"] is False
+    assert qrels == {"q": {"exact": 1}}

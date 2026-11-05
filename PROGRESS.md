@@ -9,7 +9,7 @@
 |---|---|---|---|
 | D0 | PASS | [Report](artifacts/acceptance/d0/report.md) · [Checks](artifacts/acceptance/d0/checks.json) | `ccb402f2d892b0dc87809dfaebdb2355e8bee194` |
 | M0 | PASS | [Report](artifacts/acceptance/m0/report.md) · [Checks](artifacts/acceptance/m0/checks.json) | `7845e78180d7f1cbee486ec01d3e694af8fdc0d4` |
-| M1 | NOT_STARTED | — | — |
+| M1 | IN_PROGRESS | BM25/BGE and FAISS adapters, frozen-run evaluator and sensitivity checks under development | — |
 | M2 | NOT_STARTED | — | — |
 | M3 | NOT_STARTED | — | — |
 
