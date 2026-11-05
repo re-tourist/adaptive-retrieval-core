@@ -28,17 +28,26 @@ def main() -> None:
     parser.add_argument("--run", required=True, type=Path, action="append")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    if len(args.run) < 2:
+        parser.error("Provide at least two frozen test Runfiles")
     wands = args.dataset == "wands"
+    audit = json.loads((args.admission / "audit_report.json").read_bytes())[args.dataset]
+    if audit["failures"]:
+        raise ValueError("Dataset has not passed admission")
     source = json.loads((args.admission / "dataset_manifest.json").read_bytes())[args.dataset]
     qrels = _checked_json(
         args.admission / args.dataset / "test_qrels.json", source["qrels_sha256"]["test_qrels.json"]
     )
     entities = set(json.loads(args.entity_ids.read_bytes()))
+    if len(entities) != audit["entities"]:
+        raise ValueError("Entity inventory does not cover the admitted corpus")
     runs = {}
     metrics = {}
+    run_fingerprints = {}
     for path in args.run:
         meta = json.loads((path.parent / "metrics.json").read_bytes())
-        if _digest(path) != meta["run_sha256"]:
+        run_sha = _digest(path)
+        if run_sha != meta["run_sha256"]:
             raise ValueError(f"Runfile hash mismatch: {path}")
         rows = read_run(path.read_text(encoding="utf-8").splitlines(), set(qrels), entities)
         if len(rows) != len(qrels) * 100 or {row.query_id for row in rows} != set(qrels):
@@ -47,8 +56,14 @@ def main() -> None:
         if tag in runs:
             raise ValueError(f"Duplicate strategy {tag}")
         runs[tag] = rows
+        run_fingerprints[tag] = run_sha
         metrics[tag] = evaluate(rows, qrels, entities, wands=wands)[1]
     results = {
+        "dataset": args.dataset,
+        "query_count": len(qrels),
+        "entity_ids_sha256": _digest(args.entity_ids),
+        "qrels_sha256": source["qrels_sha256"]["test_qrels.json"],
+        "run_sha256": run_fingerprints,
         "ndcg@10_paired_bootstrap": {
             f"{right}-{left}": paired_bootstrap(
                 [
@@ -57,7 +72,7 @@ def main() -> None:
                 ]
             )
             for left, right in combinations(sorted(runs), 2)
-        }
+        },
     }
     if wands:
         ledger = _checked_json(WANDS_DISPUTED, source["disputed_ledger_sha256"])

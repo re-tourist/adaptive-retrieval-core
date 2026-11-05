@@ -62,3 +62,21 @@ uv run --no-sync ruff format --check .
 uv run --no-sync python -m arc.evaluation.audit --scifact data/official/scifact --wands data/official/wands-raw --output artifacts/m0/audit
 uv run --no-sync python -m arc.evaluation.smoke --output artifacts/m0/smoke
 ```
+
+### M1 全库检索
+
+审计通过后，用已校验的原始数据目录和 `artifacts/m0/admission` 运行。默认 uv 检索依赖组使用 CUDA 12.6 的 PyTorch，需要先验证本机驱动和 `torch.cuda.is_available()`。
+
+```sh
+uv sync --locked --group sparse --group dense
+uv run --no-sync python -m arc.evaluation.baselines --dataset scifact --method e1 --data data/official/scifact --admission artifacts/m0/admission --output artifacts/m1/run --split both
+uv run --no-sync python -m arc.evaluation.baselines --dataset scifact --method e2 --data data/official/scifact --admission artifacts/m0/admission --output artifacts/m1/run --model models/bge-small-en-v1.5/5c38ec7c405ec4b44b94cc5a9bb96e735b38267a --device cuda:0 --batch-size 32 --split both
+```
+
+WANDS 使用 `--dataset wands --data data/official/wands-raw`。输出根目录下的每个数据集和策略目录须是新目录。E2 使用 [BAAI 官方 BGE 快照](https://huggingface.co/BAAI/bge-small-en-v1.5/tree/5c38ec7c405ec4b44b94cc5a9bb96e735b38267a)，模型文件名和 SHA-256 由适配器校验。使用 CPU PyTorch 的独立环境时，将 `--device` 设为 `cpu` 并记录实际依赖。CPU 结果的时延只代表所测机器。
+
+按数据集比较已固定的两份 test Runfile。以下例子同时生成 WANDS 的配对 Bootstrap 和 ADR-003 敏感性分析。
+
+```sh
+uv run --no-sync python -m arc.evaluation.comparison --dataset wands --admission artifacts/m0/admission --entity-ids artifacts/m1/run/wands/e1/entity_ids.json --run artifacts/m1/run/wands/e1/test/run.trec --run artifacts/m1/run/wands/e2/test/run.trec --output artifacts/m1/run/wands/comparison.json
+```

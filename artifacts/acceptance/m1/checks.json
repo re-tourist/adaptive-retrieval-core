@@ -86,6 +86,76 @@
           "run.trec_sha256": "239ff7ed06c592d5660d3f5fed08f73361d4084ed0b5c67e4bc8e49099f541d4",
           "per_query.json_sha256": "07f00b048d1c728fd26f595575d317131818f95c165095e7e77cfcd37200a3ec"
         }
+      },
+      "locked_index": {
+        "build_and_save_seconds": 2.2871699999959674,
+        "config": {
+          "b": 0.75,
+          "k1": 1.2,
+          "method": "lucene",
+          "stemming": false,
+          "stopwords": false,
+          "tokenizer": "unicode-nfkc-casefold-hyphen-v1"
+        },
+        "document_truncation_fraction": 0.0,
+        "document_truncations": 0,
+        "documents": 5183,
+        "index": {
+          "backend": "bm25s",
+          "backend_version": "0.2.14",
+          "build_config_hash": "d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+          "compatibility": {
+            "dataset_fingerprint": "ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147",
+            "distance": null,
+            "encoder_revision": null,
+            "precision": null,
+            "representation_type": "bm25",
+            "schema_version": "1",
+            "vector_dimension": null
+          },
+          "index_id": "bm25-ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e"
+        },
+        "index_bytes": 6130550,
+        "runtime": {
+          "device": "cpu",
+          "numpy": "2.5.4",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.12.8"
+        }
+      },
+      "locked_splits": {
+        "dev": {
+          "quality": {
+            "NDCG@10": 0.6404933403126494,
+            "Recall@100": 0.8821178409559126
+          },
+          "queries": 809,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 2.697500000067521,
+            "p95": 4.550399993604515
+          },
+          "run_sha256": "9d2886ded26818c1ebef94a63cd77fb293c9af600e43a08a548ae5a9883ab8b8",
+          "per_query_sha256": "2fd3e5bc164707add51b7a874d3325e75ff84f9039dc414d7478a2685c10537f",
+          "host_vs_locked_rank_rows_changed": 0,
+          "host_vs_locked_max_score_diff_at_same_rank": 5.7220458984375e-06
+        },
+        "test": {
+          "quality": {
+            "NDCG@10": 0.641399784605701,
+            "Recall@100": 0.8692222222222221
+          },
+          "queries": 300,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 2.5975499993364792,
+            "p95": 4.941200000757817
+          },
+          "run_sha256": "a15abaf1625ac49d1545d8e88a9009ab8919f06150af30e525079fcf691b6777",
+          "per_query_sha256": "07f00b048d1c728fd26f595575d317131818f95c165095e7e77cfcd37200a3ec",
+          "host_vs_locked_rank_rows_changed": 0,
+          "host_vs_locked_max_score_diff_at_same_rank": 3.814697265625e-06
+        }
       }
     },
     "wands": {
@@ -158,6 +228,78 @@
           "run.trec_sha256": "fd74ef6ae49735efc97dc153b5a3a0eb65e8cdcdc1d74c9ea81ba2f214f6ce8a",
           "per_query.json_sha256": "f7ba5b47a605023c14357c7d9fee40dc50a4c22e1eab070c12bbbf288188e222"
         }
+      },
+      "locked_index": {
+        "build_and_save_seconds": 10.072589799994603,
+        "config": {
+          "b": 0.75,
+          "k1": 1.2,
+          "method": "lucene",
+          "stemming": false,
+          "stopwords": false,
+          "tokenizer": "unicode-nfkc-casefold-hyphen-v1"
+        },
+        "document_truncation_fraction": 0.0,
+        "document_truncations": 0,
+        "documents": 42994,
+        "index": {
+          "backend": "bm25s",
+          "backend_version": "0.2.14",
+          "build_config_hash": "d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+          "compatibility": {
+            "dataset_fingerprint": "6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6",
+            "distance": null,
+            "encoder_revision": null,
+            "precision": null,
+            "representation_type": "bm25",
+            "schema_version": "1",
+            "vector_dimension": null
+          },
+          "index_id": "bm25-6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e"
+        },
+        "index_bytes": 54411720,
+        "runtime": {
+          "device": "cpu",
+          "numpy": "2.5.4",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.12.8"
+        }
+      },
+      "locked_splits": {
+        "dev": {
+          "quality": {
+            "Judged@10": 0.7887500000000001,
+            "NDCG@10": 0.6270709415553078,
+            "Observed-Recall@100": 0.3791808009772594
+          },
+          "queries": 80,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 21.586450002359925,
+            "p95": 32.29329999885522
+          },
+          "run_sha256": "d0c6f2dcb686f8ee990f7a493d12a51a29a49c7c5535c53c586fc1ee5fca11d3",
+          "per_query_sha256": "ef68521f9ea61f7b0a93935ba277a7346dd2b9ad6e4437e92f3d5f17d8ebf353",
+          "host_vs_locked_rank_rows_changed": 0,
+          "host_vs_locked_max_score_diff_at_same_rank": 1.9073486328125e-06
+        },
+        "test": {
+          "quality": {
+            "Judged@10": 0.7895,
+            "NDCG@10": 0.6485301539176644,
+            "Observed-Recall@100": 0.34328315396272535
+          },
+          "queries": 400,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 20.619799997803057,
+            "p95": 31.22570000414271
+          },
+          "run_sha256": "7fb3fa53f89c1e96828deed23907517adc5b26977a0130b7241608d82bbdbc59",
+          "per_query_sha256": "f7ba5b47a605023c14357c7d9fee40dc50a4c22e1eab070c12bbbf288188e222",
+          "host_vs_locked_rank_rows_changed": 2,
+          "host_vs_locked_max_score_diff_at_same_rank": 2.86102294921875e-06
+        }
       }
     }
   },
@@ -175,5 +317,22 @@
       }
     },
     "pairs": {}
-  }
+  },
+  "locked_sparse_environment": {
+    "uv": "0.9.10",
+    "python": "3.12.8",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "bm25s": "0.2.14",
+    "lock_sha256": "0a97b1362992bc1ebc7738edaaff73a8c9b8abc25bca0ae89cd34114328d5244",
+    "requirements_sha256": "bd60216f299da945656fe18e46f3f7a6a3009b9ed889d4cf31df30cb122ea998",
+    "sync": "uv pip sync --python <venv-python> --offline --no-index --find-links .cache/m1-wheelhouse --require-hashes .cache/m1-sparse-requirements.txt",
+    "exit_code": 0
+  },
+  "locked_e1_exit_codes": [
+    0,
+    0,
+    0,
+    0
+  ]
 }

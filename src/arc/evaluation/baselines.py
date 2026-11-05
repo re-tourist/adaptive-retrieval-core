@@ -82,6 +82,8 @@ def run(args: argparse.Namespace) -> None:
         }
         faiss.write_index(retriever.index, str(root / "index.faiss"))
     build_s = perf_counter() - started
+    index_files = tuple(path for path in sorted(root.rglob("*")) if path.is_file())
+    print(f"{args.dataset}/{args.method}: indexed {len(entities)} entities", flush=True)
     service = SearchService(retriever, retriever.manifest.compatibility)
     write_json(
         root / "index_manifest.json",
@@ -92,7 +94,10 @@ def run(args: argparse.Namespace) -> None:
             "document_truncations": document_truncations,
             "document_truncation_fraction": document_truncations / len(entities),
             "build_and_save_seconds": build_s,
-            "index_bytes": sum(p.stat().st_size for p in root.rglob("*") if p.is_file()),
+            "index_bytes": sum(path.stat().st_size for path in index_files),
+            "index_files_sha256": {
+                path.relative_to(root).as_posix(): _digest(path) for path in index_files
+            },
             "runtime": {
                 **runtime,
                 "platform": platform.platform(),
