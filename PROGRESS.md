@@ -1,13 +1,13 @@
 # ARC · Continuous Goal Progress
 
 - **Updated**: 2026-11-05
-- **Execution**: NOT STARTED
-- **Next stage**: D0 after Pre-Goal human review and explicit execution authorization
+- **Execution**: IN PROGRESS
+- **Next stage**: M0 official data audit and offline evaluation
 - **Provenance**: Planning artifacts generated in ChatGPT. No repository code, CI, datasets, Docker or GPU runtime was executed/verified as part of this file.
 
 | Stage | State | Verified acceptance evidence | Git commit |
 |---|---|---|---|
-| D0 | NOT_STARTED | — | — |
+| D0 | PASS | [Report](artifacts/acceptance/d0/report.md) · [Checks](artifacts/acceptance/d0/checks.json) | `ccb402f2d892b0dc87809dfaebdb2355e8bee194` |
 | M0 | NOT_STARTED | — | — |
 | M1 | NOT_STARTED | — | — |
 | M2 | NOT_STARTED | — | — |
@@ -15,10 +15,7 @@
 
 ## Next action
 
-1. In the cloned repository, read `AGENTS.md`, `PLAN.md`, `docs/plan/ARC-PLAN-001.md`, and the frozen documents.
-2. After human review authorizes D0, verify the repository state and permissions before writing.
-3. Execute D0, its real tests and acceptance gates; record outputs and commit.
-4. Continue M0–M3 automatically after each stage PASS, subject to PLAN/AGENTS constraints.
+Run M0 from the D0 implementation on `codex/v0-development`. The Pre-Goal PR remains Draft after the platform rejected the merge. The development branch is based on the reviewed Pre-Goal revision.
 
 ## Progress entry format (append per stage)
 

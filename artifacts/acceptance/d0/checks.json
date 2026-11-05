@@ -1,0 +1,72 @@
+{
+  "stage": "D0",
+  "status": "PASS",
+  "date": "2026-11-05",
+  "implementation_commit": "ccb402f2d892b0dc87809dfaebdb2355e8bee194",
+  "environment": {
+    "platform": "Windows AMD64",
+    "python": "3.12.8",
+    "uv": "0.9.10",
+    "pytest": "8.4.2",
+    "ruff": "0.15.21",
+    "gpu_used": false,
+    "lock_sha256": "9d2973f6b11d387472893fabe13ae3c7f26e3f334e66a403649b48724eab4ccd"
+  },
+  "checks": [
+    {
+      "command": "uv lock --no-python-downloads",
+      "exit_code": 0,
+      "result": "Initial resolution, 8 packages"
+    },
+    {
+      "command": "uv sync --locked --no-python-downloads",
+      "exit_code": 1,
+      "result": "Public wheel download timed out on pygments 2.21.0"
+    },
+    {
+      "command": "UV_HTTP_TIMEOUT=20 UV_HTTP_RETRIES=1 uv sync --locked --no-python-downloads",
+      "exit_code": 1,
+      "result": "Public wheel download timed out on Ruff 0.14.14"
+    },
+    {
+      "command": "uv lock --no-python-downloads --upgrade-package pygments==2.20.0 --upgrade-package ruff==0.15.21",
+      "exit_code": 0,
+      "result": "8 packages resolved"
+    },
+    {
+      "command": "uv sync --locked --offline --no-python-downloads",
+      "exit_code": 0,
+      "result": "Clean project environment, 8 packages installed after importing matching local uv cache entries"
+    },
+    {
+      "command": "uv run --no-sync python -c \"import arc, sys; print(sys.version); print(arc.__name__)\"",
+      "exit_code": 0,
+      "result": "Python 3.12.8, arc"
+    },
+    {
+      "command": "uv run --no-sync pytest -q",
+      "exit_code": 0,
+      "result": "11 passed in 0.08s"
+    },
+    {
+      "command": "uv run --no-sync ruff check .",
+      "exit_code": 0,
+      "result": "All checks passed"
+    },
+    {
+      "command": "uv run --no-sync ruff format --check .",
+      "exit_code": 0,
+      "result": "8 files already formatted"
+    },
+    {
+      "command": "uv build --wheel --offline --out-dir .cache/d0-wheel",
+      "exit_code": 0,
+      "result": "adaptive_retrieval_core-0.1.0-py3-none-any.whl built"
+    },
+    {
+      "command": "git diff --cached --check",
+      "exit_code": 0,
+      "result": "Staged implementation diff passed"
+    }
+  ]
+}

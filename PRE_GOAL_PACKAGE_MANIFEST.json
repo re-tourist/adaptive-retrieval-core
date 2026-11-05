@@ -1,6 +1,6 @@
 {
   "version": "v0.1.1",
-  "scope": "Additive package for existing adaptive-retrieval-core repo; does not include prior frozen documents",
+  "scope": "Historical Pre-Goal package snapshot at Git revision 23991c628469e99a347f681c546a4d2743e19183. Verify paths at that revision because the live progress file evolves.",
   "files": [
     {
       "path": "AGENTS.md",
