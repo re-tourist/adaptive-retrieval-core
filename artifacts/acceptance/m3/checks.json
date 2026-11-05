@@ -1,0 +1,257 @@
+{
+  "stage": "M3",
+  "status": "PASS",
+  "implementation_commit": "b61a8011292e666443f9499e34740e198386f549",
+  "verified_source_commit": "f99c33161aaf5bcbcf3f70ea389e8e1ea72d7f26",
+  "runtime": {
+    "os": "Windows 11",
+    "python": "3.12.8",
+    "uv": "0.9.10",
+    "torch": "2.8.0+cu126",
+    "cuda": "12.6",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "driver": "566.24",
+    "fastapi": "0.135.1",
+    "uvicorn": "0.42.0",
+    "batch_size": 32,
+    "omp_threads": 4,
+    "mkl_threads": 4
+  },
+  "lock_sha256": "a4ec72e2eb33bb972625dbd7250a23fb06df51a4fc4a432cecff523d45b0c2d9",
+  "wheel_sha256": "c1ca23daaa275692b1fd8f6c62c17aba8f1283cc39fdb0de7f7a945dc3f393e7",
+  "commands": [
+    {
+      "command": "uv build --wheel --offline --out-dir .cache/m3-final-wheel",
+      "exit_code": 0
+    },
+    {
+      "command": "uv pip sync --python <fresh-venv-python> --offline --no-index --find-links .cache/m1-wheelhouse --require-hashes <locked-export>",
+      "exit_code": 0
+    },
+    {
+      "command": "uv pip install --python <venv-python> --offline --no-deps --reinstall <built-wheel>",
+      "exit_code": 0
+    },
+    {
+      "command": "python -B -m pytest -q",
+      "exit_code": 0,
+      "result": "CPU 23 passed, 1 dense dependency skip; CUDA 24 passed"
+    },
+    {
+      "command": "ruff check .; ruff format --check .",
+      "exit_code": 0,
+      "result": "Both passed"
+    },
+    {
+      "command": "arc search BM25 --top-k 1 --trace",
+      "exit_code": 0,
+      "result": "Installed Windows CPU CLI stdout parsed as JSON"
+    },
+    {
+      "command": "arc serve --host 127.0.0.1 --port <port>; python scripts/container-smoke.py <base>",
+      "exit_code": 0,
+      "result": "Installed Windows CPU service smoke"
+    },
+    {
+      "command": "arc serve --host 127.0.0.1 --port <port>; python -B scripts/measure-harness.py --base <base> --dataset <dataset> --data <official-data> --admission artifacts/m0/admission --e1 <E1> --e2 <E2> --m2 <M2> --repeat 3 --output <report>",
+      "exit_code": 0,
+      "result": "All 240 measurements passed rank, filter and Trace assertions"
+    },
+    {
+      "command": "gh run watch 42035615364 --exit-status",
+      "exit_code": 0
+    }
+  ],
+  "ci": {
+    "run_id": 42035615364,
+    "url": "https://github.com/re-tourist/adaptive-retrieval-core/actions/runs/42035615364",
+    "head_sha": "f99c33161aaf5bcbcf3f70ea389e8e1ea72d7f26",
+    "jobs": {
+      "windows-latest": "success",
+      "ubuntu-latest": "success",
+      "docker": "success"
+    },
+    "docker_image_id": "sha256:7df7b88ca8a9810abfd9ba261c7362183e56d4d38a4b9d4cfbce62a5056e4f36",
+    "docker_image_bytes": 527578957,
+    "docker_search_http_smoke": true,
+    "prior_failure": {
+      "run_id": 42034775170,
+      "cause": "ConnectionResetError during readiness probe; build passed",
+      "fix": "47da81661e82460bef41327bc88f5bf0bc128344"
+    }
+  },
+  "local_http": {
+    "scifact": {
+      "sha256": "3e714b425e7596ac209f7a402ddf6dfe9e93e6dcb88fff260719a56bf037eaf3",
+      "dataset": "scifact",
+      "query_ids": [
+        "0",
+        "10",
+        "1000",
+        "1001",
+        "1002",
+        "1003",
+        "1004",
+        "1005",
+        "1006",
+        "1008"
+      ],
+      "sequential": true,
+      "snapshots": {
+        "bm25": "bm25-ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+        "dense": "dense-ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147-733c9f6931df79686dcd69f026e426e4d77c0df2c2f71a4e04e7214ee452cf94",
+        "hybrid": "hybrid-0a88c3e79031fec25e8a825a71ef9901baa4b00637af3ff8875ddb5336ef31e0",
+        "hybrid_rerank": "rerank-2621d6c616dbdd53bfc94bf497affb531021e9141f1b300b36cc1ad455b94f3a"
+      },
+      "strategies": {
+        "bm25": {
+          "hard_filter": true,
+          "http_p50_ms": 25.895650000165915,
+          "http_p95_ms": 35.734299999603536,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.033049997000489384,
+            "bm25": 6.434300001274096
+          }
+        },
+        "dense": {
+          "hard_filter": true,
+          "http_p50_ms": 29.142150000552647,
+          "http_p95_ms": 47.05400000239024,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.016100002540042624,
+            "faiss_search": 0.5919999966863543,
+            "query_encode": 13.346249994356185
+          }
+        },
+        "hybrid": {
+          "hard_filter": true,
+          "http_p50_ms": 42.5183500010462,
+          "http_p95_ms": 65.21060000522994,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.01569999585626647,
+            "bm25": 3.726549999555573,
+            "faiss_search": 0.7885499981057364,
+            "query_encode": 14.431449999392498,
+            "rrf": 0.5713999998988584
+          }
+        },
+        "hybrid_rerank": {
+          "hard_filter": true,
+          "http_p50_ms": 291.9435500007239,
+          "http_p95_ms": 338.69940000295173,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.03015000038431026,
+            "bm25": 5.44360000276356,
+            "faiss_search": 0.7682999967073556,
+            "minilm": 250.46069999734755,
+            "query_encode": 14.03184999799123,
+            "rrf": 0.5254999996395782
+          }
+        }
+      },
+      "transport": "loopback HTTP, fresh connection per request",
+      "warmup_per_strategy": 2,
+      "startup_seconds": 21.888912200003688
+    },
+    "wands": {
+      "sha256": "ed4eb8ad3ba640d98fcf7f4a560b3a85b277c1cef1df254cee8a670b79a7268b",
+      "dataset": "wands",
+      "query_ids": [
+        "173",
+        "476",
+        "271",
+        "413",
+        "484",
+        "202",
+        "82",
+        "178",
+        "15",
+        "183"
+      ],
+      "sequential": true,
+      "snapshots": {
+        "bm25": "bm25-6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+        "dense": "dense-6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6-733c9f6931df79686dcd69f026e426e4d77c0df2c2f71a4e04e7214ee452cf94",
+        "hybrid": "hybrid-df1a88599b220b5766d50d8cdf37e761352a0eebf5b9fe0e51bef935ee440ea7",
+        "hybrid_rerank": "rerank-492c44dab55b4a4221b81d37f1d437eee0fa629a7d692d54a17b5235d054bccf"
+      },
+      "strategies": {
+        "bm25": {
+          "hard_filter": true,
+          "http_p50_ms": 48.5500500035414,
+          "http_p95_ms": 76.88649999909103,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.01925000105984509,
+            "bm25": 28.87994999764487
+          }
+        },
+        "dense": {
+          "hard_filter": true,
+          "http_p50_ms": 30.606049997004448,
+          "http_p95_ms": 41.29139999713516,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.01764999979059212,
+            "faiss_search": 3.6642500017478596,
+            "query_encode": 10.002650000387803
+          }
+        },
+        "hybrid": {
+          "hard_filter": true,
+          "http_p50_ms": 57.075749999057734,
+          "http_p95_ms": 68.8875999985612,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.014749999536434188,
+            "bm25": 20.421500001248205,
+            "faiss_search": 3.6216000007698312,
+            "query_encode": 10.956449998047901,
+            "rrf": 0.49995000154012814
+          }
+        },
+        "hybrid_rerank": {
+          "hard_filter": true,
+          "http_p50_ms": 373.1734499997401,
+          "http_p95_ms": 416.1117999974522,
+          "queries": 10,
+          "rank_parity": true,
+          "requests": 30,
+          "stage_p50_ms": {
+            "assemble": 0.030449999030679464,
+            "bm25": 27.93790000214358,
+            "faiss_search": 4.385299998830305,
+            "minilm": 307.89335000372375,
+            "query_encode": 11.326549996738322,
+            "rrf": 0.5754999983764719
+          }
+        }
+      },
+      "transport": "loopback HTTP, fresh connection per request",
+      "warmup_per_strategy": 2,
+      "startup_seconds": 30.14381630000571
+    }
+  },
+  "target_server_performance": {
+    "status": "BLOCKED",
+    "reason": "No accessible target server was configured"
+  }
+}
