@@ -1,12 +1,23 @@
-# M1 checkpoint — E1 and SciFact CUDA E2 verified
+# M1 acceptance — PASS
 
-E1 completed two full-corpus runs for each official dataset using bm25s 0.2.14, Python 3.12.8, NumPy 1.26.4 and SciPy 1.15.2 on Windows CPU. The BM25 wheel was verified against the public lock hash. NumPy and SciPy came from the existing host runtime. A clean uv environment installed the three locked sparse wheels with hash enforcement (NumPy 2.5.4 and SciPy 1.18.1). Two locked runs reproduced each other byte for byte. Against the host stack, per-query metrics were identical, but float scores varied by at most 5.73e-6 and two WANDS test rank rows differed. Use the locked run as E1 for subsequent comparisons.
+E1 and E2 ran through the same SearchService on both official full corpora, with the admitted splits and Qrels. E1 rebuilt each CPU index in a clean locked sparse environment. E2 built FAISS IndexFlatIP snapshots with GPU BGE encoding and replayed every dev/test query against the checksum-verified saved indexes. Both strategies reproduced Runfiles and per-query metrics byte for byte within their locked environments. BM25 index serialization varied across independent builds; the artifact hashes identify the canonical snapshot.
 
-| E1 test | Queries | NDCG@10 | Recall@100 | Judged@10 |
-|---|---:|---:|---:|---:|
-| SciFact | 300 | 0.641400 | 0.869222 | — |
-| WANDS ARC-WANDS-400 custom | 400 | 0.648530 | 0.343283 (observed) | 0.789500 |
+| Dataset | Strategy | Test queries | NDCG@10 | Recall@100 | Judged@10 |
+|---|---|---:|---:|---:|---:|
+| scifact | E1 | 300 | 0.641400 | 0.869222 | — |
+| scifact | E2 | 300 | 0.712707 | 0.941667 | — |
+| wands | E1 | 400 | 0.648530 | 0.343283 | 0.789500 |
+| wands | E2 | 400 | 0.705657 | 0.360762 | 0.835500 |
 
-Dev and test Runfiles and per-query metrics were byte-identical across independent runs. See [checks.json](checks.json) for index manifests, measurements, file hashes and WANDS single-model disputed-grade sensitivity. Raw Runfiles and indexes remain local under `artifacts/m1/e1-host-verification` and `artifacts/m1/e1-host-repeat`. The locked artifacts are in `artifacts/m1/e1-locked` and `artifacts/m1/e1-locked-repeat`.
+WANDS uses the ARC-WANDS-400 custom split and observed recall. Unjudged and disputed items are distinct from confirmed negatives. E2−E1 paired NDCG@10 is +0.071307 on SciFact (2,000-resample 95% interval +0.034427 to +0.107701) and +0.057127 on WANDS (+0.036599 to +0.078607). On the 13 disputed WANDS test pairs, the mixed-endpoint delta bounds are [+0.057206, +0.057376]. Both preserve the E2 advantage.
 
-The BAAI safetensors are available locally and match the pinned upstream SHA-256. An E2 CPU cross-check on all 300 SciFact test queries yielded NDCG@10 0.712707 and Recall@100 0.941667. Its paired NDCG@10 difference versus locked E1 is +0.071307 (bootstrap 95% interval +0.034427 to +0.107701). This cross-check used the host CPU PyTorch runtime. The locked Windows CUDA 12.6 environment installed 48 verified wheels, and a 32×384 BGE smoke test passed on the RTX 4060. Canonical SciFact E2 matched the CPU cross-check quality exactly. Test retrieval p50/p95 was 41.67/77.89 ms on this local machine; the index build and save took 101.00 s. WANDS CUDA E2 and verified snapshot replay remain in progress. M1 still requires the WANDS paired sensitivity comparison. These E1 CPU measurements are local, so server performance remains unverified.
+| Dataset | Strategy | Build + save (s) | Index bytes | Test retrieval p50 / p95 (ms) | Truncated docs |
+|---|---|---:|---:|---:|---:|
+| scifact | E1 | 2.29 | 6,130,550 | 2.60 / 4.94 | 0 |
+| scifact | E2 | 101.00 | 7,961,133 | 41.67 / 77.89 | 455 |
+| wands | E1 | 10.07 | 54,411,720 | 20.62 / 31.23 | 0 |
+| wands | E2 | 663.69 | 66,038,829 | 15.18 / 19.86 | 27,650 |
+
+Windows 11, Python 3.12.8, RTX 4060 Laptop 8,188 MiB, NVIDIA driver 566.24. E2 used PyTorch 2.8.0+cu126, Sentence Transformers 5.7.0, float32, batch 32 and CPU exact FAISS. BGE inputs were capped at 512 tokens. Query encoding is included in E2 retrieval latency; offline corpus encoding is included only in build. These are single-query observations on a shared laptop, and do not establish server or load-test performance. The host CPU E2 SciFact cross-check matched the CUDA quality metrics but is separate from the canonical measurements.
+
+See [checks.json](checks.json) for commands, results, Qrels/Runfile bindings, model and index fingerprints, per-query file hashes, and ADR-003 sensitivities. Raw evidence stays local under `artifacts/m1/e1-locked`, `artifacts/m1/e2-locked-cuda` and their separate repeat/replay roots.
