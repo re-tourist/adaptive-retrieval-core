@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Search Playground · Adaptive Retrieval Core</title>
+  <link rel="stylesheet" href="playground.css">
+  <script src="playground.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap bar">
+      <span class="brand"><b>ARC</b> Adaptive Retrieval Core</span>
+      <a href="../docs">API reference ↗</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="intro">
+      <p class="eyebrow">RETRIEVAL WORKBENCH</p>
+      <h1>Search Playground</h1>
+      <p class="subtitle">Run a live query and inspect how ARC ranks its results.</p>
+    </div>
+    <form id="search" class="panel controls" aria-label="Search controls">
+      <label for="query">Query</label>
+      <div class="query-row">
+        <input id="query" name="query" type="search" required maxlength="4096"
+               placeholder="Enter a search query" autocomplete="off">
+        <button id="submit" type="submit" disabled>Run search <span aria-hidden="true">↗</span></button>
+      </div>
+      <div id="examples" class="examples" aria-label="Example queries"></div>
+      <div class="selectors">
+        <div><label for="primary">Strategy</label><select id="primary" disabled></select></div>
+        <div><label for="compare">Compare with</label><select id="compare" disabled></select></div>
+        <div><label for="limit">Top K</label>
+          <select id="limit"><option>3</option><option selected>5</option><option>10</option></select>
+        </div>
+      </div>
+    </form>
+    <div class="run-info">
+      <p id="status" role="status">Connecting to ARC…</p>
+      <span id="capabilities" class="badge" hidden></span>
+    </div>
+    <section id="results" aria-label="Search results" aria-busy="false"></section>
+    <p class="footnote">Scores use strategy-specific scales. Compare ranks and entity IDs across strategies.</p>
+  </main>
+</body>
+</html>

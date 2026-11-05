@@ -1,0 +1,98 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #172936;
+  background: #f0f5f6;
+  line-height: 1.5;
+  --muted: #506572;
+  --line: #d6e2e5;
+  --ink: #13303d;
+  --accent: #146452;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.wrap { width: min(1120px, 100% - 48px); margin-inline: auto; }
+.masthead { background: #102936; color: #f4f9fa; }
+.bar, .brand, .query-row, .run-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bar { justify-content: space-between; min-height: 58px; font-size: .87rem; }
+.bar a { color: #c6ede5; }
+.brand b {
+  padding: 3px 7px;
+  background: #bde9d8;
+  color: #103f34;
+  border-radius: 4px;
+  letter-spacing: .1em;
+}
+.intro { margin-block: 34px 22px; }
+.eyebrow {
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 750;
+  letter-spacing: .16em;
+  margin: 0;
+}
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 3.1rem); letter-spacing: -.045em; line-height: 1.18; }
+h2 { font-size: 1.2rem; line-height: 1.25; }
+h3 { font-size: .86rem; }
+.subtitle, .footnote, .muted { color: var(--muted); }
+.subtitle { margin-top: 6px; }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+.controls { padding: 18px; }
+label { display: block; font-size: .8rem; font-weight: 700; margin-bottom: 4px; }
+input, select, button {
+  font: inherit;
+  color: inherit;
+  border-radius: 7px;
+  border: 1px solid #9eb2b9;
+  min-height: 40px;
+}
+input, select { background: #fff; padding-inline: 10px; width: 100%; min-width: 0; }
+button { padding-inline: 13px; cursor: pointer; }
+button[type="submit"] { background: var(--accent); color: white; border-color: var(--accent); white-space: nowrap; font-weight: 650; }
+button:disabled, select:disabled { cursor: default; opacity: .67; }
+:focus-visible { outline: 3px solid #2378b7; outline-offset: 2px; }
+.examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.examples button { color: var(--accent); background: #f0f8f5; border-color: #cce5db; font-size: .8rem; min-height: 32px; }
+.examples button:hover { background: #def1e9; }
+.selectors { display: grid; grid-template-columns: 1fr 1fr minmax(68px, .26fr); gap: 12px; margin-top: 14px; }
+.run-info { justify-content: space-between; margin-block: 18px 10px; font-size: .86rem; }
+.badge { background: #e0f1ea; color: #195645; padding: 4px 10px; border-radius: 20px; flex-shrink: 0; }
+.error { color: #a02726; }
+#results { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 410px), 1fr)); align-items: start; gap: 14px; }
+.result { min-width: 0; overflow: hidden; }
+.result-head, .trace, .empty { padding: 12px 16px; }
+.result-head { background: #f9fbfc; border-bottom: 1px solid var(--line); }
+.result-head p { font-size: .82rem; margin-top: 4px; }
+.hits { list-style: none; margin: 0; padding: 0 16px; }
+.hit { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: start; gap: 10px; padding-block: 10px; }
+.hit + .hit { border-top: 1px solid var(--line); }
+.rank { background: #e8eff2; border-radius: 5px; text-align: center; font-size: .8rem; font-weight: 750; padding-block: 3px; }
+.hit-title { font-weight: 650; font-size: .89rem; overflow-wrap: anywhere; }
+.hit-meta, .score { font-size: .75rem; color: var(--muted); overflow-wrap: anywhere; }
+.hit-meta { font-family: ui-monospace, monospace; }
+.score { text-align: right; font-variant-numeric: tabular-nums; }
+.score b { color: var(--ink); display: block; }
+.trace { background: #f9fbfc; border-top: 1px solid var(--line); }
+.trace table { width: 100%; border-collapse: collapse; font-size: .77rem; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.trace th { text-align: left; }
+.trace td, .trace th { padding-block: 2px; }
+.trace td + td, .trace th + th { text-align: right; }
+.trace details { font-size: .76rem; color: var(--muted); margin-top: 6px; overflow-wrap: anywhere; }
+.trace summary { cursor: pointer; }
+.footnote { font-size: .82rem; margin-block: 14px 25px; }
+@media (max-width: 560px) {
+  .wrap { width: calc(100% - 24px); }
+  .intro { margin-top: 24px; }
+  .controls { padding: 12px; }
+  .query-row { flex-direction: column; align-items: stretch; gap: 6px; }
+  .query-row button { align-self: end; }
+  .run-info { flex-wrap: wrap; }
+  .hit { gap: 6px; }
+}
+@media (max-width: 370px) {
+  .selectors { grid-template-columns: 1fr 1fr; }
+}

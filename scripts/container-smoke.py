@@ -30,6 +30,15 @@ def smoke(base: str) -> None:
     assert body["snapshot_id"] == health["snapshots"]["bm25"]
     assert body["hits"][0]["entity_key"]["entity_id"] == "sparse"
     assert [stage["name"] for stage in body["trace"]] == ["bm25", "assemble"]
+    with urlopen(base + "/playground", timeout=10) as stream:
+        assert stream.headers.get_content_type() == "text/html"
+        assert b"Search Playground" in stream.read()
+    for asset, content_type in (("playground.css", "text/css"), ("playground.js", "javascript")):
+        with urlopen(base + "/playground/" + asset, timeout=10) as stream:
+            assert content_type in stream.headers.get_content_type()
+    with urlopen(base + "/playground/config", timeout=10) as stream:
+        config = json.load(stream)
+    assert config["corpus"] == "demo" and config["snapshots"] == health["snapshots"]
     print("ARC HTTP smoke passed:", body["strategy_id"], body["snapshot_id"])
 
 

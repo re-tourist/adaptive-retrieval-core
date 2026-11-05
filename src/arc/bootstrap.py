@@ -29,10 +29,14 @@ def configured_harness() -> SearchHarness:
             ),
             {"demo": "arc-v0-demo-1"},
         )
+    elif dataset == "playground":
+        from arc.adapters.datasets.playground import load_playground_corpus
+
+        corpus = load_playground_corpus()
     else:
         loaders = {"scifact": load_scifact_corpus, "wands": load_wands_corpus}
         if dataset not in loaders:
-            raise ValueError("ARC_DATASET must be demo, scifact or wands")
+            raise ValueError("ARC_DATASET must be demo, playground, scifact or wands")
         corpus = loaders[dataset](Path(os.environ["ARC_DATA"]))
     fingerprint = corpus.entities[0].key.revision
     sparse = BM25Retriever(corpus, fingerprint)

@@ -1,6 +1,9 @@
+import os
+from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
 from arc.application.harness import SearchHarness, SnapshotMismatch
@@ -30,12 +33,22 @@ class Request(BaseModel):
     snapshot_id: str | None = Field(default=None, max_length=256)
 
 
-def create_app(harness: SearchHarness) -> FastAPI:
+def create_app(harness: SearchHarness, *, corpus_name: str | None = None) -> FastAPI:
     app = FastAPI(title="ARC", version="0.1.0")
 
     @app.get("/healthz")
     def health() -> dict:
         return {"status": "ready", "domain": harness.domain, "snapshots": harness.snapshots}
+
+    @app.get("/playground/config", include_in_schema=False)
+    def playground_config() -> dict:
+        return {**health(), "corpus": corpus_name}
+
+    app.mount(
+        "/playground",
+        StaticFiles(directory=Path(__file__).with_name("playground"), html=True),
+        name="playground",
+    )
 
     @app.post("/search")
     def search(request: Request) -> dict:
@@ -63,4 +76,4 @@ def create_app(harness: SearchHarness) -> FastAPI:
 
 
 def factory() -> FastAPI:
-    return create_app(configured_harness())
+    return create_app(configured_harness(), corpus_name=os.getenv("ARC_DATASET", "demo"))

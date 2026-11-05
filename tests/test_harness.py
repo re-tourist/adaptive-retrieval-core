@@ -61,3 +61,44 @@ def test_cli_stdout_is_one_json_document(monkeypatch: pytest.MonkeyPatch) -> Non
         [sys.executable, "-m", "arc.entrypoints.cli", "search", "BM25", "--top-k", "1"]
     )
     assert json.loads(raw)["hits"][0]["entity_key"]["entity_id"] == "sparse"
+
+
+def test_playground_assets_and_field_note_queries(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("fastapi")
+    pytest.importorskip("bm25s")
+    pytest.importorskip("httpx")
+    from fastapi.testclient import TestClient
+
+    from arc.entrypoints.api import factory
+
+    monkeypatch.setenv("ARC_DATASET", "playground")
+    for name in ("ARC_BGE_MODEL", "ARC_DENSE_INDEX", "ARC_MINILM_MODEL"):
+        monkeypatch.delenv(name, raising=False)
+    with TestClient(factory()) as client:
+        page = client.get("/playground")
+        assert page.url.path == "/playground/" and "Search Playground" in page.text
+        assert "text/css" in client.get("/playground/playground.css").headers["content-type"]
+        assert "javascript" in client.get("/playground/playground.js").headers["content-type"]
+        config = client.get("/playground/config").json()
+        assert config == {**client.get("/healthz").json(), "corpus": "playground"}
+        assert list(config["snapshots"]) == ["bm25"]
+        for text, expected in (
+            ("BM25", "bm25"),
+            ("dense vector search", "faiss"),
+            ("reciprocal rank fusion", "rrf"),
+        ):
+            response = client.post(
+                "/search",
+                json={
+                    "query": text,
+                    "domain": config["domain"],
+                    "snapshot_id": config["snapshots"]["bm25"],
+                    "trace_level": "summary",
+                    "top_k": 3,
+                },
+            )
+            assert response.status_code == 200
+            payload = response.json()
+            assert payload["hits"][0]["source_ref"] == f"playground://{expected}"
+            assert payload["hits"][0]["score"] > 0
+            assert [stage["name"] for stage in payload["trace"]] == ["bm25", "assemble"]
