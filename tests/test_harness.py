@@ -1,3 +1,7 @@
+import json
+import subprocess
+import sys
+
 import pytest
 
 
@@ -46,3 +50,14 @@ def test_cpu_bm25_http_contract(monkeypatch: pytest.MonkeyPatch) -> None:
         assert client.post("/search", json={**body, "snapshot_id": "old"}).status_code == 409
         assert client.post("/search", json={**body, "filters": {"label": 1}}).status_code == 422
         assert client.post("/search", json={**body, "query": "  "}).status_code == 422
+
+
+def test_cli_stdout_is_one_json_document(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("bm25s")
+    monkeypatch.setenv("ARC_DATASET", "demo")
+    for name in ("ARC_BGE_MODEL", "ARC_DENSE_INDEX", "ARC_MINILM_MODEL"):
+        monkeypatch.delenv(name, raising=False)
+    raw = subprocess.check_output(
+        [sys.executable, "-m", "arc.entrypoints.cli", "search", "BM25", "--top-k", "1"]
+    )
+    assert json.loads(raw)["hits"][0]["entity_key"]["entity_id"] == "sparse"

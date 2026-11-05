@@ -1,5 +1,7 @@
 import argparse
 import json
+import sys
+from contextlib import redirect_stdout
 
 from arc.application.harness import STRATEGIES
 from arc.application.search import SearchQuery
@@ -27,15 +29,17 @@ def main() -> None:
 
         uvicorn.run("arc.entrypoints.api:factory", factory=True, host=args.host, port=args.port)
         return
-    harness = configured_harness()
     try:
-        query = SearchQuery(
-            args.query,
-            args.domain or harness.domain,
-            args.top_k,
-            frozenset(args.entity_id) if args.entity_id is not None else None,
-        )
-        response = harness.search(query, args.strategy)
+        # Third-party startup notices belong on stderr, leaving stdout as one JSON value.
+        with redirect_stdout(sys.stderr):
+            harness = configured_harness()
+            query = SearchQuery(
+                args.query,
+                args.domain or harness.domain,
+                args.top_k,
+                frozenset(args.entity_id) if args.entity_id is not None else None,
+            )
+            response = harness.search(query, args.strategy)
     except (KeyError, ValueError) as error:
         parser.error(str(error))
     print(json.dumps(present(response, units=args.units, trace=args.trace), ensure_ascii=True))
