@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from hashlib import sha256
 
@@ -16,7 +16,11 @@ class QrelsAudit:
 
 
 def audit_qrels(
-    rows: Iterable[tuple[str, str, int]], query_ids: set[str], entity_ids: set[str]
+    rows: Iterable[tuple[str, str, int]],
+    query_ids: set[str],
+    entity_ids: set[str],
+    *,
+    disputed: Mapping[tuple[str, str], tuple[int, ...]] | None = None,
 ) -> tuple[dict[str, dict[str, int]] | None, QrelsAudit]:
     labels: dict[tuple[str, str], set[int]] = {}
     distribution: Counter[int] = Counter()
@@ -44,7 +48,10 @@ def audit_qrels(
         unknown_entities,
         {qid: sum(grade > 0 for grade in docs.values()) for qid, docs in qrels.items()},
     )
-    return (None if conflicts or unknown_queries or unknown_entities else qrels), audit
+    # Require the entire observed conflict set to match the approved ledger.
+    # Unexpected, changed or stale entries must fail closed.
+    eligible = conflicts == (disputed or {}) and not unknown_queries and not unknown_entities
+    return (qrels if eligible else None), audit
 
 
 def wands_split(query_ids: Iterable[str]) -> tuple[tuple[str, ...], tuple[str, ...]]:

@@ -13,6 +13,7 @@ SCIFACT_SOURCE = "https://github.com/beir-cellar/beir/wiki/Datasets-available"
 WANDS_SOURCE = "https://github.com/wayfair/WANDS"
 WANDS_REVISION = "3b74dcf4ba29ab8ff3e6a50b5b09fc627cb882b5"
 
+WANDS_DISPUTED = Path(__file__).with_name("wands_disputed.json")
 WANDS_BLOBS = {
     "product.csv": "a415f7295dc0d90b3163ef606da611a4e9ddeca8",
     "query.csv": "acb3c1f4cf1b775f494225afec79ec2163fc3e03",
@@ -43,7 +44,9 @@ def write_json(path: Path, data: object) -> str:
 
 def inspect(
     dataset: Dataset, *, wands: bool
-) -> tuple[dict[str, object], tuple[str, ...], tuple[str, ...], list[str]]:
+) -> tuple[
+    dict[str, object], tuple[str, ...], tuple[str, ...], dict[str, dict[str, dict[str, int]]]
+]:
     entities = {entity.key.entity_id for entity in dataset.corpus.entities}
     units = dataset.corpus.units
     failures = []
@@ -70,16 +73,31 @@ def inspect(
     if set(dev).intersection(test):
         failures.append("Dev and test query IDs overlap")
     label_audits = {}
+    normalized = {}
+    disputed = None
+    if wands:
+        ledger = json.loads(WANDS_DISPUTED.read_bytes())
+        split_for = {qid: "dev" for qid in dev} | {qid: "test" for qid in test}
+        if len(ledger) != 14 or any(
+            entry["status"] != "DISPUTED" or split_for.get(entry["query_id"]) != entry["split"]
+            for entry in ledger
+        ):
+            failures.append("Invalid DISPUTED ledger or WANDS split")
+        disputed = {(row["query_id"], row["entity_id"]): tuple(row["grades"]) for row in ledger}
+        if len(disputed) != len(ledger):
+            failures.append("Duplicate DISPUTED ledger entry")
     for split, rows in splits.items():
         qids = set(dataset.queries) if wands else set(dev if split == "dev" else test)
-        _, audit = audit_qrels(rows, qids & dataset.queries.keys(), entities)
+        qrels, audit = audit_qrels(rows, qids & dataset.queries.keys(), entities, disputed=disputed)
         conflicts = [
             {"query_id": qid, "entity_id": eid, "grades": grades}
             for (qid, eid), grades in sorted(audit.conflicts.items())
         ]
         label_audits[split] = {**asdict(audit), "conflicts": conflicts}
-        if conflicts or audit.unknown_queries or audit.unknown_entities:
-            failures.append(f"{split}: conflicting labels or invalid query/entity references")
+        if qrels is None:
+            failures.append(f"{split}: unapproved conflicts or invalid query/entity references")
+        else:
+            normalized[split] = qrels
     report = {
         "entities": len(entities),
         "units": len(units),
@@ -89,8 +107,17 @@ def inspect(
         "empty_fields": dataset.empty_fields,
         "labels": label_audits,
         "failures": failures,
+        "queries_without_positive": {
+            split: [
+                qid
+                for qid in ids
+                if not any(grade > 0 for grade in judgments.get(qid, {}).values())
+            ]
+            for split, ids in (("dev", dev), ("test", test))
+            if (judgments := normalized.get("all" if wands else split)) is not None
+        },
     }
-    return report, dev, test, failures
+    return report, dev, test, normalized
 
 
 def main() -> int:
@@ -114,7 +141,7 @@ def main() -> int:
             dataset = load(root)
             if not is_wands and dataset.files != SCIFACT_FILES:
                 raise ValueError("SciFact file fingerprints differ from the verified BEIR archive")
-            report, dev, test, failures = inspect(dataset, wands=is_wands)
+            report, dev, test, normalized = inspect(dataset, wands=is_wands)
         except (OSError, ValueError, KeyError) as error:
             reports[name] = {"failures": [f"{type(error).__name__}: {error}"]}
             print(f"{name}: audit input rejected: {error}")
@@ -126,16 +153,29 @@ def main() -> int:
             for split, ids in (("dev", dev), ("test", test)):
                 filename = f"{split}_query_ids.json"
                 split_files[filename] = write_json(directory / filename, ids)
+        qrels_files = {}
+        if not report["failures"]:
+            for split, ids in (("dev", dev), ("test", test)):
+                judgments = normalized["all" if is_wands else split]
+                filename = f"{split}_qrels.json"
+                qrels_files[filename] = write_json(
+                    directory / filename, {qid: judgments[qid] for qid in ids}
+                )
         manifest[name] = {
             "source": WANDS_SOURCE if is_wands else SCIFACT_SOURCE,
             "revision": WANDS_REVISION if is_wands else "BEIR official SciFact ZIP",
             "input_sha256": dataset.files,
             "split_sha256": split_files,
+            "qrels_sha256": qrels_files,
         }
+        if is_wands:
+            manifest[name]["disputed_ledger_sha256"] = sha256(
+                WANDS_DISPUTED.read_bytes()
+            ).hexdigest()
         reports[name] = report
         print(
             f"{name}: {report['entities']} entities, {report['queries']} queries; "
-            f"{len(dev)} dev/{len(test)} test, {len(failures)} audit failures"
+            f"{len(dev)} dev/{len(test)} test, {len(report['failures'])} audit failures"
         )
     write_json(args.output / "dataset_manifest.json", manifest)
     write_json(args.output / "audit_report.json", reports)

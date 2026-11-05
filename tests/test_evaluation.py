@@ -100,3 +100,15 @@ def test_wands_official_header_and_text_boundary(tmp_path: Path) -> None:
         "product_description: ",
     ]
     assert dataset.empty_fields["product_description"] == 1
+
+
+def test_disputed_policy_requires_exact_conflict_set_and_grades() -> None:
+    rows = [("q", "exact", 2), ("q", "exact", 1), ("q", "partial", 1), ("q", "partial", 1)]
+    policy = {("q", "exact"): (1, 2)}
+    qrels, audit = audit_qrels(rows, {"q"}, ENTITIES, disputed=policy)
+    assert qrels == {"q": {"partial": 1}}
+    assert audit.conflicts == policy and audit.identical_repeats == 1
+    assert audit_qrels(rows, {"q"}, ENTITIES, disputed={("q", "exact"): (0, 2)})[0] is None
+    assert audit_qrels(rows[1:], {"q"}, ENTITIES, disputed=policy)[0] is None
+    changed = [*rows, ("q", "partial", 2)]
+    assert audit_qrels(changed, {"q"}, ENTITIES, disputed=policy)[0] is None
