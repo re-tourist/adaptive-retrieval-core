@@ -29,6 +29,6 @@ jobs:
       - name: Start image and verify search over HTTP
         run: |
           docker image inspect arc:v0 --format '{{.Id}} {{.Size}}'
-          docker run --rm -d --name arc-smoke -p 127.0.0.1:8080:8000 arc:v0
-          trap 'docker logs arc-smoke; docker stop arc-smoke' EXIT
+          docker run -d --name arc-smoke -p 127.0.0.1:8080:8000 arc:v0
+          trap 'docker logs arc-smoke || true; docker rm -f arc-smoke' EXIT
           python3 scripts/container-smoke.py http://127.0.0.1:8080

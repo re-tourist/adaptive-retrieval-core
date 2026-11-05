@@ -12,7 +12,7 @@ def smoke(base: str) -> None:
             with urlopen(base + "/healthz", timeout=2) as stream:
                 health = json.load(stream)
             break
-        except URLError:
+        except (URLError, ConnectionError, TimeoutError):
             if monotonic() >= deadline:
                 raise
             sleep(1)
