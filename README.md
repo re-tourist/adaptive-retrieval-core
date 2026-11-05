@@ -51,3 +51,14 @@ uv run --no-sync pytest
 uv run --no-sync ruff check .
 uv run --no-sync ruff format --check .
 ```
+
+### M0 数据审计与指标校验
+
+1. 从 [BEIR 官方目录](https://github.com/beir-cellar/beir/wiki/Datasets-available) 下载 SciFact ZIP，核对发布方 MD5 `5f7d1de60b170fc8027bb7898e2efca1`，解压到 `data/official/scifact`。
+2. 从 [Wayfair/WANDS](https://github.com/wayfair/WANDS/tree/3b74dcf4ba29ab8ff3e6a50b5b09fc627cb882b5/dataset) 获取固定提交的三个 TSV 文件，保留原始字节并置于 `data/official/wands-raw`。
+3. 运行以下命令。审计校验原件指纹，写出拆分、数据清单和失败明细。若有冲突或孤立引用，审计以退出码 1 拒绝正式评分。合成算例用于检验指标公式。
+
+```sh
+uv run --no-sync python -m arc.evaluation.audit --scifact data/official/scifact --wands data/official/wands-raw --output artifacts/m0/audit
+uv run --no-sync python -m arc.evaluation.smoke --output artifacts/m0/smoke
+```
