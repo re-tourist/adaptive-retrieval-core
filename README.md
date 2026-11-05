@@ -80,3 +80,13 @@ WANDS 使用 `--dataset wands --data data/official/wands-raw`。输出根目录�
 ```sh
 uv run --no-sync python -m arc.evaluation.comparison --dataset wands --admission artifacts/m0/admission --entity-ids artifacts/m1/run/wands/e1/entity_ids.json --run artifacts/m1/run/wands/e1/test/run.trec --run artifacts/m1/run/wands/e2/test/run.trec --output artifacts/m1/run/wands/comparison.json
 ```
+
+### M2 固定候选集重排
+
+M1 验收后，从同一数据集的 E1/E2 已冻结 Runfile 生成 E3/E4。下载 [固定 MiniLM-L6-v2 快照](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2/tree/233902d25c440f23af6f7d6e94d2946bac0bee0a) 到 `models/ms-marco-MiniLM-L6-v2/233902d25c440f23af6f7d6e94d2946bac0bee0a`。适配器校验权重与 tokenizer 文件。示例先运行 10 条 dev 查询，再运行全部 SciFact test 查询。
+
+```sh
+uv run --no-sync python -m arc.evaluation.hybrid --dataset scifact --data data/official/scifact --admission artifacts/m0/admission --e1 artifacts/m1/run/scifact/e1 --e2 artifacts/m1/run/scifact/e2 --model models/ms-marco-MiniLM-L6-v2/233902d25c440f23af6f7d6e94d2946bac0bee0a --output artifacts/m2/run --device cuda:0 --batch-size 32 --dev-smoke 10 --split both
+```
+
+WANDS 使用自己的数据目录与 E1/E2 快照。E3 固定使用 RRF k=60，E4 仅重排 E3 前 50 项并保留原尾部。E4 Runfile 中的分数按名次编码，以保持标准 TREC 排序语义。MiniLM logits 只用于决定前 50 项的顺序。用 M1 的 `arc.evaluation.comparison` 追加两份 E3/E4 test Runfile 即可生成四策略配对 Bootstrap 和 WANDS 争议标签敏感性分析。
