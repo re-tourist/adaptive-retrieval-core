@@ -1,0 +1,179 @@
+{
+  "stage": "M1",
+  "status": "IN_PROGRESS",
+  "implementation_commit": "07478dc87e1749dd9b88497e97ba0af57de418e0",
+  "environment": {
+    "python": "3.12.8",
+    "numpy": "1.26.4",
+    "scipy": "1.15.2",
+    "bm25s": "0.2.14",
+    "device": "CPU",
+    "installation": "host numerical runtime plus verified BM25 wheel; not uv dense environment"
+  },
+  "command": "python -B -m arc.evaluation.baselines --dataset <dataset> --method e1 --data <official-input> --admission artifacts/m0/admission --output <root> --split both",
+  "e1_exit_codes": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "results": {
+    "scifact": {
+      "index": {
+        "build_and_save_seconds": 1.7511439000008977,
+        "config": {
+          "b": 0.75,
+          "k1": 1.2,
+          "method": "lucene",
+          "stemming": false,
+          "stopwords": false,
+          "tokenizer": "unicode-nfkc-casefold-hyphen-v1"
+        },
+        "document_truncation_fraction": 0.0,
+        "document_truncations": 0,
+        "documents": 5183,
+        "index": {
+          "backend": "bm25s",
+          "backend_version": "0.2.14",
+          "build_config_hash": "d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+          "compatibility": {
+            "dataset_fingerprint": "ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147",
+            "distance": null,
+            "encoder_revision": null,
+            "precision": null,
+            "representation_type": "bm25",
+            "schema_version": "1",
+            "vector_dimension": null
+          },
+          "index_id": "bm25-ee7f3b52273d5aeda502c05c0889cbc8f450e9017d4e32e0bedd52f8ef30b147-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e"
+        },
+        "index_bytes": 6035601,
+        "runtime": {
+          "device": "cpu",
+          "numpy": "1.26.4",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.12.8"
+        }
+      },
+      "splits": {
+        "dev": {
+          "quality": {
+            "NDCG@10": 0.6404933403126494,
+            "Recall@100": 0.8821178409559126
+          },
+          "queries": 809,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 2.592299999378156,
+            "p95": 4.121799996937625
+          },
+          "run_sha256": "15037d04f2894c1c964c3fd3cc348b732b648ba511ca4d06b85ab89d7d3cc8ec",
+          "run.trec_sha256": "15037d04f2894c1c964c3fd3cc348b732b648ba511ca4d06b85ab89d7d3cc8ec",
+          "per_query.json_sha256": "2fd3e5bc164707add51b7a874d3325e75ff84f9039dc414d7478a2685c10537f"
+        },
+        "test": {
+          "quality": {
+            "NDCG@10": 0.641399784605701,
+            "Recall@100": 0.8692222222222221
+          },
+          "queries": 300,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 2.53895000423654,
+            "p95": 4.487500002142042
+          },
+          "run_sha256": "239ff7ed06c592d5660d3f5fed08f73361d4084ed0b5c67e4bc8e49099f541d4",
+          "run.trec_sha256": "239ff7ed06c592d5660d3f5fed08f73361d4084ed0b5c67e4bc8e49099f541d4",
+          "per_query.json_sha256": "07f00b048d1c728fd26f595575d317131818f95c165095e7e77cfcd37200a3ec"
+        }
+      }
+    },
+    "wands": {
+      "index": {
+        "build_and_save_seconds": 9.366982100000314,
+        "config": {
+          "b": 0.75,
+          "k1": 1.2,
+          "method": "lucene",
+          "stemming": false,
+          "stopwords": false,
+          "tokenizer": "unicode-nfkc-casefold-hyphen-v1"
+        },
+        "document_truncation_fraction": 0.0,
+        "document_truncations": 0,
+        "documents": 42994,
+        "index": {
+          "backend": "bm25s",
+          "backend_version": "0.2.14",
+          "build_config_hash": "d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e",
+          "compatibility": {
+            "dataset_fingerprint": "6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6",
+            "distance": null,
+            "encoder_revision": null,
+            "precision": null,
+            "representation_type": "bm25",
+            "schema_version": "1",
+            "vector_dimension": null
+          },
+          "index_id": "bm25-6aa9597503c22b0117cb94f7a1435ca56079f30dd0cff40af3443c98261f45b6-d94b3f29834c7a29c71dea88b04a4d635a190a554483b8bda7800b930c90617e"
+        },
+        "index_bytes": 54270451,
+        "runtime": {
+          "device": "cpu",
+          "numpy": "1.26.4",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.12.8"
+        }
+      },
+      "splits": {
+        "dev": {
+          "quality": {
+            "Judged@10": 0.7887500000000001,
+            "NDCG@10": 0.6270709415553078,
+            "Observed-Recall@100": 0.3791808009772594
+          },
+          "queries": 80,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 18.87785000144504,
+            "p95": 27.86519999790471
+          },
+          "run_sha256": "5b2ef01f36bd6dcd0752c306e3f6d6c1a477683323a61666ed1e4048a1a9a690",
+          "run.trec_sha256": "5b2ef01f36bd6dcd0752c306e3f6d6c1a477683323a61666ed1e4048a1a9a690",
+          "per_query.json_sha256": "ef68521f9ea61f7b0a93935ba277a7346dd2b9ad6e4437e92f3d5f17d8ebf353"
+        },
+        "test": {
+          "quality": {
+            "Judged@10": 0.7895,
+            "NDCG@10": 0.6485301539176644,
+            "Observed-Recall@100": 0.34328315396272535
+          },
+          "queries": 400,
+          "query_truncations": 0,
+          "retrieval_latency_ms": {
+            "p50": 18.687250005314127,
+            "p95": 29.46259999589529
+          },
+          "run_sha256": "fd74ef6ae49735efc97dc153b5a3a0eb65e8cdcdc1d74c9ea81ba2f214f6ce8a",
+          "run.trec_sha256": "fd74ef6ae49735efc97dc153b5a3a0eb65e8cdcdc1d74c9ea81ba2f214f6ce8a",
+          "per_query.json_sha256": "f7ba5b47a605023c14357c7d9fee40dc50a4c22e1eab070c12bbbf288188e222"
+        }
+      }
+    }
+  },
+  "wands_e1_disputed_sensitivity": {
+    "disputed_pairs": 13,
+    "ndcg@10": {
+      "main": {
+        "e1": 0.6485301539176644
+      },
+      "observed_high": {
+        "e1": 0.648470808763944
+      },
+      "observed_low": {
+        "e1": 0.6485301539176644
+      }
+    },
+    "pairs": {}
+  }
+}
