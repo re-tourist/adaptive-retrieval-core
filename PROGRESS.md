@@ -17,6 +17,11 @@
 
 Target server performance remains BLOCKED because no designated server was available. Local CUDA, localhost HTTP, CPU Docker, and the complete official E1–E4 experiments have independent evidence. The Pre-Goal PR remains Draft after the platform rejected the merge; the development branch uses the reviewed Pre-Goal revision.
 
+## Showcase follow-up
+
+- Implementation `2942a25` on `codex/arc-showcase`.
+- Local wheel, browser, corpus audit and documentation checks passed. The [Showcase report](artifacts/acceptance/showcase/report.md) records commands, results and screenshot provenance. Final platform and container checks are recorded on the Showcase PR.
+
 ## Progress entry format (append per stage)
 
 ```text

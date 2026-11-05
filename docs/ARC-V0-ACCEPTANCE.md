@@ -48,9 +48,9 @@ SciFact 全库 5,183 条，使用 809 dev 和 300 test。WANDS 全库 42,994 件
 
 ## 复现与边界
 
-1. 按 [README](../README.md) 安装锁定环境并从官方来源获取数据和固定权重。运行 M0 审计生成本地准入清单。
+1. 按 [实验复现指南](REPRODUCING.md) 安装锁定环境并从官方来源获取数据和固定权重。运行 M0 审计生成本地准入清单。
 2. 依次执行 M1 E1/E2、M2 E3/E4 与四策略配对比较。每个报告保存数据、模型、索引、Runfile 和逐查询结果的指纹，原始数据、模型和大体积运行产物保留在本地。
-3. 通过 README 中的 `arc search`、`arc serve` 和容器命令复现。用 `scripts/measure-harness.py` 对两个正式快照核对在线排名与 Trace。
+3. 通过 [Quickstart](QUICKSTART.md) 中的 `arc search`、`arc serve` 和容器命令复现。用 `scripts/measure-harness.py` 对两个正式快照核对在线排名与 Trace。
 4. [GitHub Actions](https://github.com/re-tourist/adaptive-retrieval-core/actions/runs/42035615364) 对实现提交实际通过 Windows、Ubuntu 和 Docker。CPU Docker 演示与本机全策略 CUDA 服务分别验收。
 
 目标服务器性能为 **BLOCKED**。当前没有可访问的指定服务器，实测数字限于本机和 CI 容器。V0 采用公开语料与单进程服务，尚无生产 ACL、多租户隔离和并发容量证据。后续可在目标硬件补齐并发与资源画像，再依据业务时延预算选择是否开启重排。WANDS 的不完整标注限制了对真实全召回的解释。

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 426" role="img" aria-labelledby="title desc">
+  <title id="title">ARC V0 benchmark quality versus latency</title>
+  <desc id="desc">Two scatter plots use the same scales. Dense leads SciFact and Hybrid plus Rerank leads WANDS on NDCG at 10. Reranking has the highest p95 HTTP latency on both datasets.</desc>
+  <style>text{font-family:system-ui,sans-serif;fill:#172936}.muted{fill:#506572}.grid{stroke:#d6e2e5}.axis{stroke:#849aa4}.pt{font-weight:700;font-size:14px}.tick{font-size:13px}.small{font-size:14px}</style>
+  <rect width="1040" height="426" rx="16" fill="#f0f5f6"/>
+  <text x="29" y="35" font-size="23" font-weight="700">Ranking quality vs. request latency</text>
+  <text x="30" y="59" class="small muted">NDCG@10 ↑ · Windows serial loopback HTTP p95 ↓</text>
+  <rect x="25" y="80" width="465" height="293" rx="10" fill="#fff" stroke="#d6e2e5"/>
+  <text x="42" y="108" font-size="18" font-weight="700">SciFact</text>
+  <text x="134" y="108" class="small muted">300 official test queries</text>
+  <path class="grid" d="M72 324h388"/>
+  <text x="64" y="328" class="tick muted" text-anchor="end">0.62</text>
+  <path class="grid" d="M72 269h388"/>
+  <text x="64" y="273" class="tick muted" text-anchor="end">0.66</text>
+  <path class="grid" d="M72 214h388"/>
+  <text x="64" y="218" class="tick muted" text-anchor="end">0.70</text>
+  <path class="grid" d="M72 159h388"/>
+  <text x="64" y="163" class="tick muted" text-anchor="end">0.74</text>
+  <path class="axis" d="M72 324v5"/>
+  <text x="72" y="347" class="tick muted" text-anchor="middle">0</text>
+  <path class="axis" d="M158 324v5"/>
+  <text x="158" y="347" class="tick muted" text-anchor="middle">100</text>
+  <path class="axis" d="M244 324v5"/>
+  <text x="244" y="347" class="tick muted" text-anchor="middle">200</text>
+  <path class="axis" d="M331 324v5"/>
+  <text x="331" y="347" class="tick muted" text-anchor="middle">300</text>
+  <path class="axis" d="M417 324v5"/>
+  <text x="417" y="347" class="tick muted" text-anchor="middle">400</text>
+  <text x="460" y="347" class="tick muted" text-anchor="end">ms</text>
+  <g data-dataset="SciFact" data-strategy="E1" data-ndcg="0.641400" data-p95="35.73">
+    <title>SciFact E1: NDCG@10 0.641400, HTTP p95 35.73 ms</title>
+    <circle cx="103" cy="294" r="5.5" fill="#456679"/>
+    <text x="116" y="299" class="pt">E1</text>
+  </g>
+  <g data-dataset="SciFact" data-strategy="E2" data-ndcg="0.712707" data-p95="47.05">
+    <title>SciFact E2: NDCG@10 0.712707, HTTP p95 47.05 ms</title>
+    <circle cx="113" cy="196" r="10" fill="none" stroke="#126650" stroke-width="1.5"/>
+    <circle cx="113" cy="196" r="5.5" fill="#126650"/>
+    <text x="126" y="201" class="pt">E2</text>
+  </g>
+  <g data-dataset="SciFact" data-strategy="E3" data-ndcg="0.689995" data-p95="65.21">
+    <title>SciFact E3: NDCG@10 0.689995, HTTP p95 65.21 ms</title>
+    <circle cx="128" cy="228" r="5.5" fill="#2d5289"/>
+    <text x="141" y="233" class="pt">E3</text>
+  </g>
+  <g data-dataset="SciFact" data-strategy="E4" data-ndcg="0.700141" data-p95="338.70">
+    <title>SciFact E4: NDCG@10 0.700141, HTTP p95 338.70 ms</title>
+    <circle cx="364" cy="214" r="5.5" fill="#8b4c17"/>
+    <text x="351" y="219" class="pt" text-anchor="end">E4</text>
+  </g>
+  <rect x="510" y="80" width="465" height="293" rx="10" fill="#fff" stroke="#d6e2e5"/>
+  <text x="527" y="108" font-size="18" font-weight="700">WANDS</text>
+  <text x="619" y="108" class="small muted">400 test queries · ARC split</text>
+  <path class="grid" d="M557 324h388"/>
+  <text x="549" y="328" class="tick muted" text-anchor="end">0.62</text>
+  <path class="grid" d="M557 269h388"/>
+  <text x="549" y="273" class="tick muted" text-anchor="end">0.66</text>
+  <path class="grid" d="M557 214h388"/>
+  <text x="549" y="218" class="tick muted" text-anchor="end">0.70</text>
+  <path class="grid" d="M557 159h388"/>
+  <text x="549" y="163" class="tick muted" text-anchor="end">0.74</text>
+  <path class="axis" d="M557 324v5"/>
+  <text x="557" y="347" class="tick muted" text-anchor="middle">0</text>
+  <path class="axis" d="M643 324v5"/>
+  <text x="643" y="347" class="tick muted" text-anchor="middle">100</text>
+  <path class="axis" d="M729 324v5"/>
+  <text x="729" y="347" class="tick muted" text-anchor="middle">200</text>
+  <path class="axis" d="M816 324v5"/>
+  <text x="816" y="347" class="tick muted" text-anchor="middle">300</text>
+  <path class="axis" d="M902 324v5"/>
+  <text x="902" y="347" class="tick muted" text-anchor="middle">400</text>
+  <text x="945" y="347" class="tick muted" text-anchor="end">ms</text>
+  <g data-dataset="WANDS" data-strategy="E1" data-ndcg="0.648530" data-p95="76.89">
+    <title>WANDS E1: NDCG@10 0.648530, HTTP p95 76.89 ms</title>
+    <circle cx="623" cy="285" r="5.5" fill="#456679"/>
+    <text x="636" y="290" class="pt">E1</text>
+  </g>
+  <g data-dataset="WANDS" data-strategy="E2" data-ndcg="0.705657" data-p95="41.29">
+    <title>WANDS E2: NDCG@10 0.705657, HTTP p95 41.29 ms</title>
+    <circle cx="593" cy="206" r="5.5" fill="#126650"/>
+    <text x="606" y="211" class="pt">E2</text>
+  </g>
+  <g data-dataset="WANDS" data-strategy="E3" data-ndcg="0.726482" data-p95="68.89">
+    <title>WANDS E3: NDCG@10 0.726482, HTTP p95 68.89 ms</title>
+    <circle cx="616" cy="177" r="5.5" fill="#2d5289"/>
+    <text x="629" y="182" class="pt">E3</text>
+  </g>
+  <g data-dataset="WANDS" data-strategy="E4" data-ndcg="0.744195" data-p95="416.11">
+    <title>WANDS E4: NDCG@10 0.744195, HTTP p95 416.11 ms</title>
+    <circle cx="916" cy="153" r="10" fill="none" stroke="#8b4c17" stroke-width="1.5"/>
+    <circle cx="916" cy="153" r="5.5" fill="#8b4c17"/>
+    <text x="903" y="158" class="pt" text-anchor="end">E4</text>
+  </g>
+  <text x="30" y="404" class="small muted">E1 BM25   ·   E2 Dense   ·   E3 Hybrid   ·   E4 Hybrid + Rerank</text>
+  <text x="1010" y="404" text-anchor="end" class="small muted">Ring = highest observed NDCG@10</text>
+</svg>
