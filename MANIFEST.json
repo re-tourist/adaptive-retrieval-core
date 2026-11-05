@@ -1,0 +1,71 @@
+{
+  "project": "Adaptive Retrieval Core",
+  "package_version": "initial-document-bundle-v0.1",
+  "date": "2026-11-05",
+  "canonical_document_count": 5,
+  "canonical_markdown_count": 5,
+  "docx_readable_copy_count": 3,
+  "base_documents": [
+    {
+      "path": "docs/rfc/RFC-001.md",
+      "source_original": "Adaptive_Retrieval_Core_RFC_v0.1.md",
+      "bytes": 22697,
+      "sha256": "876f00f2fb4590a49a14807cefadf35f885b5aca00a8668d120f19a80de68c35"
+    },
+    {
+      "path": "docs/evaluation/ARC-EVAL-001.md",
+      "source_original": "ARC_EVAL_001_Benchmark_Selection_v0.1.md",
+      "bytes": 10761,
+      "sha256": "26cc2f986a47767a78e8a2edeab91d478d3113ce994780cedf0376f71c81a425"
+    },
+    {
+      "path": "docs/evaluation/ARC-EXP-001.md",
+      "source_original": "ARC_EXP_001_Experiment_Protocol_v0.1_PROPOSED.md",
+      "bytes": 10327,
+      "sha256": "482ce46d6b919c0d38452badd635e7fe715359464b3bdd16d15525f8915bd295"
+    },
+    {
+      "path": "docs/tasks/ARC-M0-001.md",
+      "source_original": "ARC_M0_001_Codex_Task_Brief_v0.1.md",
+      "bytes": 3972,
+      "sha256": "b52577fa0a984325d4cbf8584823a7c8739c1938baf906ecf34848430946056f"
+    },
+    {
+      "path": "docs/architecture/ARC-TECH-001.md",
+      "source_original": "ARC_TECH_001_Technical_Architecture_v0.1.md",
+      "bytes": 18958,
+      "sha256": "9b00ac88923da3f8611415aa672aaa6c031aad7c8269826071f4cf821df6921c"
+    },
+    {
+      "path": "docs/readable/RFC-001.docx",
+      "source_original": "Adaptive_Retrieval_Core_RFC_v0.1.docx",
+      "bytes": 29504,
+      "sha256": "24dd93801c8bb16ad54091e7e905ecd2213cdfbd02fc2fffce66a1add8c9b75c"
+    },
+    {
+      "path": "docs/readable/ARC-EVAL-001.docx",
+      "source_original": "ARC_EVAL_001_Benchmark_Selection_v0.1.docx",
+      "bytes": 17436,
+      "sha256": "e089c1966d0148a8be42d3c1da408afe9a3a2a94bbad374778e1a8e174355289"
+    },
+    {
+      "path": "docs/readable/ARC-TECH-001.docx",
+      "source_original": "ARC_TECH_001_Technical_Architecture_v0.1.docx",
+      "bytes": 51622,
+      "sha256": "c7f1aa7dfcaf6fd17dfe5e4d4cf002879ec143ff201b4d7fd291230feda3e642"
+    }
+  ],
+  "status": {
+    "RFC-001": "FROZEN",
+    "ARC-EVAL-001": "FROZEN",
+    "ARC-EXP-001": "PROPOSED",
+    "ARC-M0-001": "READY FOR IMPLEMENTATION (not run)",
+    "ARC-TECH-001": "FROZEN"
+  },
+  "notes": [
+    "five core Markdown documents preserved byte-for-byte; three DOCX reading copies also preserved",
+    "decision history is an index/annotation, not a rewrite of frozen RFC",
+    "_local/TUAN_ENVIRONMENT_NOTES.md is personal and gitignored",
+    "no source code or completed benchmark results in this bundle"
+  ]
+}
