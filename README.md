@@ -2,7 +2,7 @@
 
 **Benchmark-driven, modular information retrieval core for enterprise AI harnesses.**
 
-当前仓库处于 **文档基线 / D0 开始前**：尚无已验收代码、已运行的 Benchmark 成绩或生产服务。项目目标是用可插拔的 BM25、Dense、Hybrid 和 Rerank 管线，验证文本（BEIR/SciFact）与商品（Wayfair/WANDS）两个场景的质量、成本和系统可复用性，并为未来多模态检索预留可演进边界。
+当前工程阶段和验收证据见 [PROGRESS.md](PROGRESS.md)。项目目标是用可插拔的 BM25、Dense、Hybrid 和 Rerank 管线，验证文本（BEIR/SciFact）与商品（Wayfair/WANDS）两个场景的质量、成本和系统可复用性，并为未来多模态检索预留可演进边界。
 
 > **开始开发前请阅读**：[`docs/INDEX.md`](docs/INDEX.md)。请保留文档原有版本和状态，不要把 PROPOSED 文档擅自当成冻结规范。
 
@@ -38,3 +38,16 @@ Pre-Goal 人工复核并明确授权后，从 [执行入口](PLAN.md) 启动 D0�
 ARC 采用独立的 Python 3.12 + uv 项目环境，D0/M0 优先使用 CPU。M1 前实测目标服务器环境，再确定 GPU 运行配置。环境边界见 [ADR-002](docs/adr/ADR-002-uv-and-lightweight-backends.md)。
 
 原始文档和执行包的校验清单分别见 [MANIFEST.json](MANIFEST.json) 与 [PRE_GOAL_PACKAGE_MANIFEST.json](PRE_GOAL_PACKAGE_MANIFEST.json)。
+
+### 本地 CPU 检查（Windows / Linux）
+
+安装 uv 后，在仓库根目录执行。D0 只依赖 Python 3.12 和开发测试工具。
+
+```sh
+uv python install 3.12
+uv sync --locked
+uv run --no-sync python -c "import arc"
+uv run --no-sync pytest
+uv run --no-sync ruff check .
+uv run --no-sync ruff format --check .
+```
