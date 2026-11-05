@@ -68,5 +68,14 @@
       "exit_code": 0,
       "result": "Staged implementation diff passed"
     }
-  ]
+  ],
+  "remote_ci": {
+    "head_sha": "da66a9404834ca5dd7f41507e572a838b8a3c913",
+    "run_id": 42022284062,
+    "conclusion": "success",
+    "jobs": {
+      "windows-latest": "success",
+      "ubuntu-latest": "success"
+    }
+  }
 }

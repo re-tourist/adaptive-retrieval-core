@@ -1,0 +1,82 @@
+{
+  "stage": "M0",
+  "status": "BLOCKED",
+  "date": "2026-11-05",
+  "environment": {
+    "platform": "Windows AMD64",
+    "python": "3.12.8",
+    "uv": "0.9.10",
+    "gpu_used": false
+  },
+  "checks": [
+    {
+      "command": "uv run --no-sync pytest -q",
+      "exit_code": 0,
+      "result": "17 passed in 0.16s"
+    },
+    {
+      "command": "uv run --no-sync ruff check .",
+      "exit_code": 0,
+      "result": "All checks passed"
+    },
+    {
+      "command": "uv run --no-sync ruff format --check .",
+      "exit_code": 0,
+      "result": "17 files formatted"
+    },
+    {
+      "command": "uv run --no-sync python -m arc.evaluation.smoke --output artifacts/m0/smoke",
+      "exit_code": 0,
+      "result": "Synthetic TREC round-trip and metrics written"
+    },
+    {
+      "command": "uv run --no-sync python -m arc.evaluation.audit --scifact data/official/scifact --wands data/official/wands-raw --output artifacts/m0/audit",
+      "exit_code": 1,
+      "result": "Both datasets loaded. WANDS has conflicting labels; official scoring is inadmissible."
+    },
+    {
+      "command": "uv run --no-sync python -m arc.evaluation.audit --scifact data/official/scifact --wands data/official/wands-raw --output artifacts/m0/audit-repeat",
+      "exit_code": 1,
+      "result": "Same conflict gate; all 6 generated JSON files byte-identical"
+    }
+  ],
+  "provenance": {
+    "scifact": {
+      "input_sha256": {
+        "corpus.jsonl": "dec31c8182f3d744c7d2c09423756fd1d17cbef75808db13ba01cc0aab4d1ac6",
+        "qrels/test.tsv": "0864bb985e0ca2367ba217977e72004d549054b2b06666ed9d4825ac7c21284c",
+        "qrels/train.tsv": "a53f2114831916c096b6c37d9e54da68cef4efdcdbd5ed46533601af972acf1d",
+        "queries.jsonl": "8ff84a7c903f722981cd8d595c022660140c51867b27608a6d4910db86080313"
+      },
+      "revision": "BEIR official SciFact ZIP",
+      "source": "https://github.com/beir-cellar/beir/wiki/Datasets-available",
+      "split_sha256": {
+        "dev_query_ids.json": "9cc41068c675ff93f821536db2a637d8d39c86c873adb66ed9aff1ba28f1321d",
+        "test_query_ids.json": "d27ed81cc2b5a2805f791fe81ee785e2a475ad07966268cecad5c3bfe4689201"
+      }
+    },
+    "wands": {
+      "input_sha256": {
+        "label.csv": "c11fe81ad62f17f56f316b0ec9630ebe8fbe1393578cb0ca4f05c17253a180ef",
+        "product.csv": "d993926254572e6eba96c8fd87cc549a17fb91ad3748308036eee4cf92b10ac6",
+        "query.csv": "63b61660560fecc33ec490804c7e2b81402ee3e7c31a9cbb5e03736639f68e95"
+      },
+      "revision": "3b74dcf4ba29ab8ff3e6a50b5b09fc627cb882b5",
+      "source": "https://github.com/wayfair/WANDS",
+      "split_sha256": {
+        "dev_query_ids.json": "af639100ee3a430cdfbfbcc3a1e821f624c4afa2e21a784207c43be6d467ce2e",
+        "test_query_ids.json": "b070f921054d6647cff45e8ac7f251a8850ca55b156c512ba76a65ca064ee83f"
+      }
+    }
+  },
+  "audit_report_sha256": "151df026e23b9f08b8b7092325c30223fadc5a97759d388e158678c2d5144505",
+  "scifact_archive_sha256": "536e14446a0ba56ed1398ab1055f39fe852686ecad24a6306c80c490fa8e0165",
+  "wands_conflicts": {
+    "total": 14,
+    "dev": 1,
+    "test": 13,
+    "irrelevant_partial": 5,
+    "partial_exact": 9
+  },
+  "implementation_commit": "8057872318c9b5c67bfa2ca74fefe373f9b8025f"
+}
