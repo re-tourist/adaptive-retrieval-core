@@ -1,6 +1,6 @@
 # ARC 文档总索引
 
-本目录是迄今讨论并产出的 **5 份独立项目文档** 的完整收录。冻结规范不直接被后续草案覆盖。
+下表列出五份基线文档，后续执行决策和入口见下文。冻结规范按原版本保留。
 
 | 优先读序 | ID | 规范原件 | 文件形式 | 状态 | 用途 |
 |---|---|---|---|---|---|
@@ -15,9 +15,15 @@
 - **先读各文档状态**：FROZEN 是设计基线；PROPOSED 尚需审定；READY 只表示可讨论或开始执行，不代表已完成。
 - RFC-001 最初写的是 Amazon ESCI 的候选商品精排；随后的正式决策 **ARC-EVAL-001 改为 Wayfair WANDS 商品全库检索**，以降低启动成本并统一任务类型。旧 RFC 原文保留，以后在 RFC v0.2 同步。
 - RFC-001 曾倾向单一主搜索后端（OpenSearch 等候选）；随后 **ARC-TECH-001 倾向 V0 的 `bm25s + FAISS Flat Exact`**，这是当前实施方向；尚未进行后端验证，不代表生产级单引擎。
-- ARC-EXP-001 仍然标为 PROPOSED；对其中未实际验证的数据质量和配置参数，不得写成实验事实。
+- ARC-EXP-001 原文保持 PROPOSED。[执行审定附录](evaluation/ARC-EXP-001-EXECUTION-DECISION.md) 有条件允许 D0/M0 启动。M1/M2 正式实验须通过 M0 数据审计与协议准入检查。
 
 详见 [决策历史](DECISION_LOG.md)。
+
+### 执行与协作
+
+- [执行入口](../PLAN.md)、[执行总计划](plan/ARC-PLAN-001.md)、[进度台账](../PROGRESS.md)、[持续 Goal 提示词](../GOAL_PROMPT.md)。
+- [仓库指令](../AGENTS.md)、[Git 工作流](engineering/GIT_WORKFLOW.md)、[ADR-002](adr/ADR-002-uv-and-lightweight-backends.md)。
+- [执行包版本与校验](../PRE_GOAL_PACKAGE_MANIFEST.json)。
 
 ### 附属文件
 

@@ -65,7 +65,6 @@
   "notes": [
     "five core Markdown documents preserved byte-for-byte; three DOCX reading copies also preserved",
     "decision history is an index/annotation, not a rewrite of frozen RFC",
-    "_local/TUAN_ENVIRONMENT_NOTES.md is personal and gitignored",
     "no source code or completed benchmark results in this bundle"
   ]
 }

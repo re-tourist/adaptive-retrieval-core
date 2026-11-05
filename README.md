@@ -29,10 +29,12 @@ DOCX 阅读副本放在 `docs/readable/`；规范更改应首先在 Markdown 中
 
 `D0（仓库与环境） → M0（数据与评测器） → M1（BM25/Dense） → M2（Hybrid/Rerank） → M3（API/Trace/Docker）`
 
-正式开始 D0 前，先按 `docs/DECISION_LOG.md` 解决历史版本间的两处已记录变更，并将实验协议审定。
+实验协议原文仍为 **PROPOSED**。[执行审定附录](docs/evaluation/ARC-EXP-001-EXECUTION-DECISION.md) 有条件允许 D0/M0 启动。M1/M2 正式实验须通过 M0 数据审计并满足协议准入要求。历史决策见 [决策日志](docs/DECISION_LOG.md)，RFC、TECH、EVAL 冻结原件按版本保留。
+
+Pre-Goal 人工复核并明确授权后，从 [执行入口](PLAN.md) 启动 D0，按 [进度台账](PROGRESS.md) 恢复，遵循 [Git 工作流](docs/engineering/GIT_WORKFLOW.md)。
 
 ## 运行环境
 
-开发目标：Python 3.12，`uv`，CPU-first D0/M0；GPU 计算延后至 M1/M2。服务器私有路径、代理和容器名字不应提交到公开仓库。
+ARC 采用独立的 Python 3.12 + uv 项目环境，D0/M0 优先使用 CPU。M1 前实测目标服务器环境，再确定 GPU 运行配置。环境边界见 [ADR-002](docs/adr/ADR-002-uv-and-lightweight-backends.md)。
 
-此 ZIP 包的版本与来源核验见 `MANIFEST.json`。
+原始文档和执行包的校验清单分别见 [MANIFEST.json](MANIFEST.json) 与 [PRE_GOAL_PACKAGE_MANIFEST.json](PRE_GOAL_PACKAGE_MANIFEST.json)。
