@@ -66,7 +66,7 @@ def run(args: argparse.Namespace) -> None:
         if args.model is None or args.model.name != MODEL_REVISION:
             raise ValueError("E2 requires the pinned BGE snapshot directory")
         encoder = BGEEncoder(args.model, args.device, args.batch_size)
-        retriever = DenseRetriever(corpus, fingerprint, encoder)
+        retriever = DenseRetriever(corpus, fingerprint, encoder, snapshot=args.index_from)
         config = retriever.config
         document_truncations = retriever.document_truncations
         runtime = {
@@ -94,6 +94,7 @@ def run(args: argparse.Namespace) -> None:
             "document_truncations": document_truncations,
             "document_truncation_fraction": document_truncations / len(entities),
             "build_and_save_seconds": build_s,
+            "reused_dense_snapshot": args.index_from is not None,
             "index_bytes": sum(path.stat().st_size for path in index_files),
             "index_files_sha256": {
                 path.relative_to(root).as_posix(): _digest(path) for path in index_files
@@ -173,11 +174,14 @@ def main() -> None:
     parser.add_argument("--admission", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", type=Path)
+    parser.add_argument("--index-from", type=Path, help="Replay a verified E2 index")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--split", choices=("dev", "both"), default="dev")
     parser.add_argument("--smoke", type=int, default=0)
     args = parser.parse_args()
+    if args.index_from and args.method != "e2":
+        parser.error("--index-from is only supported for E2")
     if args.smoke < 0 or args.smoke and args.split != "dev":
         parser.error("Smoke is a nonnegative query limit for dev only")
     run(args)

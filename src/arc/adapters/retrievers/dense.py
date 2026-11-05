@@ -1,4 +1,5 @@
 import json
+from dataclasses import asdict
 from hashlib import file_digest, sha256
 from importlib.metadata import version
 from pathlib import Path
@@ -14,6 +15,7 @@ MODEL_ID = "BAAI/bge-small-en-v1.5"
 MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 MAX_LENGTH = 512
+EMBEDDING_DIMENSION = 384
 MODEL_FILES = {
     "1_Pooling/config.json": "d1caf60c96f5fba2157c0c26b76d80818fad6cf0b8eb5e73ec372ff9818eba5c",
     "config.json": "094f8e891b932f2000c92cfc663bac4c62069f5d8af5b5278c4306aef3084750",
@@ -64,16 +66,19 @@ class BGEEncoder:
 
 
 class DenseRetriever:
-    def __init__(self, corpus: Corpus, fingerprint: str, encoder: BGEEncoder) -> None:
+    def __init__(
+        self,
+        corpus: Corpus,
+        fingerprint: str,
+        encoder: BGEEncoder,
+        *,
+        snapshot: Path | None = None,
+    ) -> None:
         self.units = tuple(sorted(corpus.units, key=lambda unit: unit.unit_id))
         self.domain = self.units[0].entity_key.domain
         if any(unit.entity_key.domain != self.domain for unit in self.units):
             raise ValueError("Dense snapshot must contain one domain")
         self.encoder = encoder
-        vectors, self.document_truncations = encoder.encode([unit.text for unit in self.units])
-        dimension = vectors.shape[1]
-        self.index = faiss.IndexFlatIP(dimension)
-        self.index.add(vectors)
         self.query_truncations = 0
         self.config = {
             "model": MODEL_ID,
@@ -88,7 +93,13 @@ class DenseRetriever:
         }
         config_hash = sha256(json.dumps(self.config, sort_keys=True).encode()).hexdigest()
         compatibility = IndexCompatibility(
-            fingerprint, "dense", "1", MODEL_REVISION, dimension, "inner_product", "float32"
+            fingerprint,
+            "dense",
+            "1",
+            MODEL_REVISION,
+            EMBEDDING_DIMENSION,
+            "inner_product",
+            "float32",
         )
         self.manifest = IndexManifest(
             f"dense-{fingerprint}-{config_hash}",
@@ -97,6 +108,33 @@ class DenseRetriever:
             version("faiss-cpu"),
             config_hash,
         )
+
+        if snapshot is None:
+            vectors, self.document_truncations = encoder.encode([unit.text for unit in self.units])
+            if vectors.shape != (len(self.units), EMBEDDING_DIMENSION):
+                raise ValueError("Unexpected BGE embedding shape")
+            self.index = faiss.IndexFlatIP(EMBEDDING_DIMENSION)
+            self.index.add(vectors)
+        else:
+            meta = json.loads((snapshot / "index_manifest.json").read_bytes())
+            if meta["index"] != asdict(self.manifest):
+                raise ValueError("Incompatible saved dense index manifest")
+            inventory = json.loads((snapshot / "entity_ids.json").read_bytes())
+            if inventory != [unit.unit_id for unit in self.units]:
+                raise ValueError("Saved dense index entity order differs from corpus")
+            index_path = snapshot / "index.faiss"
+            with index_path.open("rb") as stream:
+                digest = file_digest(stream, "sha256").hexdigest()
+            if digest != meta["index_files_sha256"]["index.faiss"]:
+                raise ValueError("Saved dense index fingerprint mismatch")
+            self.index = faiss.read_index(str(index_path))
+            if (
+                not isinstance(self.index, faiss.IndexFlatIP)
+                or self.index.ntotal != len(self.units)
+                or self.index.d != EMBEDDING_DIMENSION
+            ):
+                raise ValueError("Saved dense index format or shape mismatch")
+            self.document_truncations = meta["document_truncations"]
 
     def retrieve(self, query: str, domain: str, limit: int) -> tuple[Candidate, ...]:
         if domain != self.domain:
