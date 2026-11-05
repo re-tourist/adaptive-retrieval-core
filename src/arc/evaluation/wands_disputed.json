@@ -1,0 +1,142 @@
+[
+  {
+    "entity_id": "31306",
+    "grades": [
+      0,
+      1
+    ],
+    "query_id": "0",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "1990",
+    "grades": [
+      0,
+      1
+    ],
+    "query_id": "106",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "34349",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "12",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "696",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "24",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "5766",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "243",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "38402",
+    "grades": [
+      0,
+      1
+    ],
+    "query_id": "246",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "2076",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "258",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "19210",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "293",
+    "split": "dev",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "602",
+    "grades": [
+      0,
+      1
+    ],
+    "query_id": "313",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "22268",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "327",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "29138",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "421",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "40107",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "425",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "15033",
+    "grades": [
+      0,
+      1
+    ],
+    "query_id": "444",
+    "split": "test",
+    "status": "DISPUTED"
+  },
+  {
+    "entity_id": "24413",
+    "grades": [
+      1,
+      2
+    ],
+    "query_id": "89",
+    "split": "test",
+    "status": "DISPUTED"
+  }
+]

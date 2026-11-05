@@ -1,0 +1,39 @@
+# Python
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.py[cod]
+*.egg-info/
+
+# Local data and experiment outputs
+data/
+artifacts/*
+!artifacts/acceptance/
+artifacts/acceptance/*/*
+!artifacts/acceptance/*/report.md
+!artifacts/acceptance/*/checks.json
+models/
+checkpoints/
+indexes/
+.cache/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.faiss
+
+# Private local environment notes and credentials
+_local/
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

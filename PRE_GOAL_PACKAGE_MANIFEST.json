@@ -1,0 +1,41 @@
+{
+  "version": "v0.1.1",
+  "scope": "Historical Pre-Goal package snapshot at Git revision 23991c628469e99a347f681c546a4d2743e19183. Verify paths at that revision because the live progress file evolves.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 3819,
+      "sha256": "e965163026d8c394b1f500e9e23618d483ceca67c3b7773076e2c28cc9435a1e"
+    },
+    {
+      "path": "GOAL_PROMPT.md",
+      "bytes": 2623,
+      "sha256": "6e167cac68bae372b4208f0e6f2218e9a7c781efa6fd1d8af56963becd07533c"
+    },
+    {
+      "path": "PLAN.md",
+      "bytes": 2211,
+      "sha256": "eff2c325898961e36c76742ed55bbd43759b6503f9336486621e97f5953e5fab"
+    },
+    {
+      "path": "PROGRESS.md",
+      "bytes": 1472,
+      "sha256": "7ee56d65473f1035295feeeb0b29accd415753181596f480bff92288744cf2eb"
+    },
+    {
+      "path": "docs/adr/ADR-002-uv-and-lightweight-backends.md",
+      "bytes": 1490,
+      "sha256": "1418a328169db7f6122138510cb6d89f856532afef583474722332e15249245f"
+    },
+    {
+      "path": "docs/evaluation/ARC-EXP-001-EXECUTION-DECISION.md",
+      "bytes": 3645,
+      "sha256": "e6a9937cc0360a2a143b978489c0e8c819abbcbbd31d105733ed52983b54c211"
+    },
+    {
+      "path": "docs/plan/ARC-PLAN-001.md",
+      "bytes": 9644,
+      "sha256": "0607870f6c772d53b08e693ad963b07ebe10516efa5b8c244f20021a62bb8e40"
+    }
+  ]
+}
