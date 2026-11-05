@@ -2,7 +2,14 @@
 
 **Benchmark-driven, modular information retrieval core for enterprise AI harnesses.**
 
-当前工程阶段和验收证据见 [PROGRESS.md](PROGRESS.md)。项目目标是用可插拔的 BM25、Dense、Hybrid 和 Rerank 管线，验证文本（BEIR/SciFact）与商品（Wayfair/WANDS）两个场景的质量、成本和系统可复用性，并为未来多模态检索预留可演进边界。
+**V0.1.0 · D0–M3 已验收。** ARC 提供 BM25、BGE + FAISS、RRF 和 MiniLM 重排，以及 Python、CLI、FastAPI、Trace 和 CPU Docker 演示。详见 [V0 总验收报告](docs/ARC-V0-ACCEPTANCE.md) 和 [进度台账](PROGRESS.md)。
+
+| 正式测试 NDCG@10 | E1 BM25 | E2 Dense | E3 RRF | E4 MiniLM |
+|---|---:|---:|---:|---:|
+| SciFact（300 条） | 0.641400 | 0.712707 | 0.689995 | 0.700141 |
+| WANDS（自定义 400 条） | 0.648530 | 0.705657 | 0.726482 | 0.744195 |
+
+正式实验在 Windows 11 / RTX 4060 Laptop 上完成。WANDS 标注不完整，指标基于现有 Qrels；目标服务器性能尚未验收。Windows、Ubuntu 和 CPU Docker 的工程验收见 [GitHub Actions](https://github.com/re-tourist/adaptive-retrieval-core/actions/runs/42035615364)。
 
 > **开始开发前请阅读**：[`docs/INDEX.md`](docs/INDEX.md)。请保留文档原有版本和状态，不要把 PROPOSED 文档擅自当成冻结规范。
 
@@ -31,7 +38,7 @@ DOCX 阅读副本放在 `docs/readable/`；规范更改应首先在 Markdown 中
 
 实验协议原文仍为 **PROPOSED**。[执行审定附录](docs/evaluation/ARC-EXP-001-EXECUTION-DECISION.md) 有条件允许 D0/M0 启动。M1/M2 正式实验须通过 M0 数据审计并满足协议准入要求。历史决策见 [决策日志](docs/DECISION_LOG.md)，RFC、TECH、EVAL 冻结原件按版本保留。
 
-Pre-Goal 人工复核并明确授权后，从 [执行入口](PLAN.md) 启动 D0，按 [进度台账](PROGRESS.md) 恢复，遵循 [Git 工作流](docs/engineering/GIT_WORKFLOW.md)。
+历史执行计划见 [PLAN.md](PLAN.md)，协作规范见 [Git 工作流](docs/engineering/GIT_WORKFLOW.md)。
 
 ## 运行环境
 
