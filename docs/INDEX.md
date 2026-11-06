@@ -8,7 +8,12 @@ V0 的 D0–M3 已验收。以下入口覆盖使用、设计与证据。
 - [V0 验收报告](ARC-V0-ACCEPTANCE.md) · 正式结果、时延测量与阶段证据。
 - [复现实验](REPRODUCING.md) · 官方数据、固定模型和复现命令。
 
-## 规范与历史
+## 贡献与当前任务
+
+- [GitHub Issues](https://github.com/re-tourist/adaptive-retrieval-core/issues) 跟踪当前工作，[Milestones](https://github.com/re-tourist/adaptive-retrieval-core/milestones) 聚合阶段。
+- [Git 工作流](engineering/GIT_WORKFLOW.md) 说明贡献与验收流程，[仓库指令](../AGENTS.md) 定义 Codex 权限与人工审核边界。
+
+## 技术规范与实验协议
 
 下表保留文档原始状态。实际交付与实验状态以 V0 验收报告为准。
 
@@ -29,11 +34,12 @@ V0 的 D0–M3 已验收。以下入口覆盖使用、设计与证据。
 
 详见 [决策历史](DECISION_LOG.md)。
 
-### 执行与协作
+## 历史规划与交付
 
-- [执行入口](../PLAN.md)、[执行总计划](plan/ARC-PLAN-001.md)、[进度台账](../PROGRESS.md)、[持续 Goal 提示词](../GOAL_PROMPT.md)。
-- [仓库指令](../AGENTS.md)、[Git 工作流](engineering/GIT_WORKFLOW.md)、[ADR-002](adr/ADR-002-uv-and-lightweight-backends.md)。
-- [执行包版本与校验](../PRE_GOAL_PACKAGE_MANIFEST.json)。
+- [V0 规划归档](../PLAN.md)、[原始执行计划](plan/ARC-PLAN-001.md)、[原始 Goal 提示词](../GOAL_PROMPT.md)。
+- [交付证据台账](../PROGRESS.md)、[版本发布](https://github.com/re-tourist/adaptive-retrieval-core/releases)。
+- [ADR-002 · 运行时与检索后端](adr/ADR-002-uv-and-lightweight-backends.md)、[ADR-003 · WANDS 争议标注](adr/ADR-003-wands-disputed-labels.md)。
+- [历史 Pre-Goal 执行包校验清单](../PRE_GOAL_PACKAGE_MANIFEST.json)。
 
 ### 附属文件
 

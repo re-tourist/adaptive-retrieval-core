@@ -20,3 +20,5 @@
 WANDS 使用 ARC 自定义 80/400 拆分与不完整标注。时延来自搭载 RTX 4060 的 Windows 11 笔记本。V0 面向本地使用和评测，生产级访问控制、租户隔离和并发容量超出其验收范围。[完整结果与测量条件](docs/ARC-V0-ACCEPTANCE.md)
 
 [工程设计](docs/ENGINEERING.md) · [复现实验](docs/REPRODUCING.md) · [演示语料与素材来源](docs/SHOWCASE.md) · [版本发布](https://github.com/re-tourist/adaptive-retrieval-core/releases)
+
+[贡献流程](docs/engineering/GIT_WORKFLOW.md) · [当前任务](https://github.com/re-tourist/adaptive-retrieval-core/issues) · [交付历史](PROGRESS.md)

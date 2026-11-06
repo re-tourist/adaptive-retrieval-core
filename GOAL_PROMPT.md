@@ -1,6 +1,6 @@
-# ARC · One-shot Continuous Codex Goal Prompt
+# ARC · Original V0 Codex Goal Prompt
 
-After Pre-Goal review and authorization to start D0–M3, copy the body below into a fresh Codex Goal in the repository root. If your Codex version lacks a Goal interface, use an equivalent task thread; the repo plan remains the same. This prompt does not guarantee uninterrupted background execution if the client/tool budget stops.
+> Historical record of the original V0 execution request. D0–M3 passed and shipped in v0.1.0. See [the evidence ledger](PROGRESS.md) and [current contribution rules](AGENTS.md).
 
 ---
 

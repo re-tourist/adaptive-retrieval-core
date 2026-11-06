@@ -20,3 +20,5 @@
 WANDS uses ARC’s custom 80/400 split and incomplete relevance judgments. Latencies come from a Windows 11 laptop with an RTX 4060 GPU. V0 is scoped to local use and evaluation. Production access control, tenant isolation, and concurrent capacity are outside its acceptance scope. [Full benchmark and conditions](docs/ARC-V0-ACCEPTANCE.md)
 
 [Architecture](docs/ENGINEERING.md) · [Reproduce V0](docs/REPRODUCING.md) · [Demo catalog and image provenance](docs/SHOWCASE.md) · [Releases](https://github.com/re-tourist/adaptive-retrieval-core/releases)
+
+[Contribute](docs/engineering/GIT_WORKFLOW.md) · [Current issues](https://github.com/re-tourist/adaptive-retrieval-core/issues) · [Delivery history](PROGRESS.md)

@@ -1,8 +1,11 @@
 # ARC GitHub 开发工作流
 
-1. 从最新的远程默认分支创建独立 feature 或 milestone 分支，例如 `codex/m0-data-audit`。同步前先检查工作区和远程分支，保留现有本地修改。
-2. 使用 Conventional Commits，按可独立审查的变更提交，例如 `docs: add milestone acceptance report` 或 `feat(retrieval): add sparse retrieval adapter`。
-3. 重大变更必须通过 Pull Request 审查。可先开 Draft PR 汇集证据。禁止强推、破坏性 reset 或未经授权直接修改受保护分支。
-4. 每个里程碑必须提交精简验收报告，记录实际测试和 lint 命令、退出码、结果、证据路径、提交和未解决事项。在 [进度台账](../../PROGRESS.md) 登记验收结论。D0–M3 获得执行授权后，可在同一工作分支按阶段提交。阶段通过即继续下一阶段，日常开发、测试、提交和进度记录可在同一个 Goal 中完成。遇到重大架构变更、数据安全风险、破坏性 Git 操作或无法解决的外部阻碍时，暂停受影响工作并请求人工决策。
-5. 提交前检查 staged diff 和新增文件。禁止提交密钥、个人服务器配置、私有路径、模型权重、大型数据、原始实验产物或未经授权的数据。需要复现数据时，核验许可并记录官方来源和校验值。
-6. 重大架构变更通过新增 ADR 记录背景、决策、影响及所替代的条款，再随 PR 审查。冻结规范原件按版本保留。
+**Issue → Branch → Commit → PR → CI → Merge → Issue Close**
+
+1. 在 [Issues](https://github.com/re-tourist/adaptive-retrieval-core/issues) 查找或创建可独立验收的任务，写明范围和验收条件。阶段用 Milestone 聚合，详细设计放在技术文档。已交付工作的补录标记 `Retrospective`，写明事后归档并链接原始证据。
+2. 检查工作区并从最新远程默认分支创建独立分支，例如 `codex/docs-governance`。保留本地已有修改。用 Conventional Commits 提交便于独立审查的变更。
+3. 提交前检查暂存差异、测试、lint 和敏感内容。开 PR 时关联 Issue，填写实际命令、退出码、结果、证据路径和已知限制。Codex 主导的 PR 标明 **AI-assisted implementation**，并如实填写审核状态。可用 Draft PR 收集尚未齐备的证据。
+4. 合并前核对当前 PR 提交的全部 CI 检查与平台要求。低风险文档和治理 PR 可按 [AGENTS.md](../../AGENTS.md) 授权正常合并。核心算法、重大架构、正式实验协议和安全相关变更须人工审核。正式发布须单独授权。GitHub 的权限、分支保护和审批规则始终生效。
+5. 合并后确认默认分支包含交付，关闭已验收的 Issue 并关联 PR 与证据。确认阶段验收条件和相关 Issues 均已完成后关闭 Milestone。阶段验收报告记录命令、退出码、结果、提交和限制。发现阻碍时在 Issue 或 PR 记录原因和下一步。
+
+冻结规范的变更用新 ADR 记录背景、决策、影响及替代条款。涉及数据复现时核验许可、记录官方来源与校验值，避免提交密钥、私有配置、模型权重、大型数据和原始实验产物。
