@@ -29,26 +29,36 @@ def configured_harness() -> SearchHarness:
             ),
             {"demo": "arc-v0-demo-1"},
         )
+    elif dataset == "playground":
+        from arc.adapters.datasets.playground import load_playground_corpus
+
+        corpus = load_playground_corpus()
+    elif dataset == "catalog":
+        from arc.adapters.datasets.catalog import load_catalog_corpus
+
+        corpus = load_catalog_corpus()
     else:
         loaders = {"scifact": load_scifact_corpus, "wands": load_wands_corpus}
         if dataset not in loaders:
-            raise ValueError("ARC_DATASET must be demo, scifact or wands")
+            raise ValueError("ARC_DATASET must be demo, playground, catalog, scifact or wands")
         corpus = loaders[dataset](Path(os.environ["ARC_DATA"]))
     fingerprint = corpus.entities[0].key.revision
-    sparse = BM25Retriever(corpus, fingerprint)
+    sparse = BM25Retriever(corpus, fingerprint, require_match=dataset == "catalog")
     sparse_service = SearchService(sparse, sparse.manifest.compatibility)
     dense_service = reranker = None
     model = os.getenv("ARC_BGE_MODEL")
     snapshot = os.getenv("ARC_DENSE_INDEX")
     mini = os.getenv("ARC_MINILM_MODEL")
     device = os.getenv("ARC_DEVICE", "cpu")
-    if bool(model) != bool(snapshot) or (mini and not model):
-        raise ValueError("Configure the BGE model and saved dense index together before MiniLM")
-    if model and snapshot:
+    if (not model and (snapshot or mini)) or (model and not snapshot and dataset != "catalog"):
+        raise ValueError("Configure BGE before a dense index or MiniLM; only catalog can build it")
+    if model:
         from arc.adapters.retrievers.dense import BGEEncoder, DenseRetriever
 
         encoder = BGEEncoder(Path(model), device, 32)
-        dense = DenseRetriever(corpus, fingerprint, encoder, snapshot=Path(snapshot))
+        dense = DenseRetriever(
+            corpus, fingerprint, encoder, snapshot=Path(snapshot) if snapshot else None
+        )
         dense_service = SearchService(dense, dense.manifest.compatibility)
     if mini:
         from arc.adapters.retrievers.minilm import MiniLMReranker
