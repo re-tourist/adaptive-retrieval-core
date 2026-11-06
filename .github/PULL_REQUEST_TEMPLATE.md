@@ -1,15 +1,19 @@
-## 变更范围
+## Scope
 
-- 目的与里程碑
-- 关联 ADR 或决策（如适用）
+- Issue: #<!-- number. Use Closes #N when this PR completes the issue. -->
+- Change and acceptance criteria:
+- Design or ADR link, if applicable:
 
-## 验收证据
+## Evidence
 
-- 实际执行的命令、退出码及结果
-- 验收报告路径
-- 待验证项、失败或风险
+- Commands, exit codes and results:
+- Acceptance report or artifacts:
+- Failed or unverified checks and limitations:
 
-## 提交前检查
+## Review and merge
 
-- [ ] 已检查暂存内容，无密钥、私人配置、模型权重、大型数据或未授权数据。
-- [ ] 冻结规范原件已保留，重大架构变更已记录 ADR（如适用）。
+- Implementation disclosure: <!-- Write **AI-assisted implementation** for a Codex-led PR. -->
+- Review required and current status:
+- [ ] Checked the diff for secrets, private paths and unlicensed or large artifacts.
+- [ ] Preserved frozen specifications or documented proposed changes in a new ADR.
+- [ ] Confirmed all CI checks passed for the current PR head and GitHub merge requirements are satisfied.

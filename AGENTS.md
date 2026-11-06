@@ -1,38 +1,22 @@
 # ARC · Repository Instructions for Codex
 
-This is a long-running, multi-milestone research-engineering project. **Do not stop after one milestone solely to ask for the next prompt.** Follow `PLAN.md` and `PROGRESS.md`; continue until all authorized stages pass, or a real blocking condition occurs. Starting D0 requires explicit authorization after Pre-Goal review.
+Use the [Git workflow](docs/engineering/GIT_WORKFLOW.md) for contributions, the [documentation index](docs/INDEX.md) for design and protocol, and [GitHub Issues](https://github.com/re-tourist/adaptive-retrieval-core/issues) for current work. [PLAN.md](PLAN.md) and [PROGRESS.md](PROGRESS.md) record the delivered V0 program. Start new stages only within the user's authorized scope. Continue through authorized stages until the acceptance gates pass or a concrete blocker stops the affected work.
 
-## Read before modifying code
+## Authority and review
 
-1. `PLAN.md` — executable stage gates and resumption.
-2. `docs/plan/ARC-PLAN-001.md` — authoritative execution specification.
-3. `docs/architecture/ARC-TECH-001.md` — frozen module and dependency rules.
-4. `docs/evaluation/ARC-EVAL-001.md` and `docs/evaluation/ARC-EXP-001-EXECUTION-DECISION.md` — dataset and experiment boundaries.
-5. `docs/evaluation/ARC-EXP-001.md`, `docs/tasks/ARC-M0-001.md`, `docs/rfc/RFC-001.md` — existing detail; preserve frozen originals.
-6. `PROGRESS.md` — recorded evidence and next unfinished stage.
+- Within the authorized task, Codex may maintain Issues, Milestones and labels, create branches and commits, open PRs, run tests, fix CI within scope, update acceptance evidence, and maintain task links and completion states.
+- Codex may merge low-risk documentation and governance PRs through GitHub when all CI checks for the current PR head pass, required reviews are satisfied, and the platform permits a normal merge.
+- Core algorithms, major architecture, formal experiment protocols and security-related changes require human review before merge. Formal releases require separate authorization. Document changes to frozen specifications in new ADRs and raise material conflicts for human decision.
+- Respect branch protection, review rules and access controls. Do not force-push, reset user changes, delete remote resources, change security-sensitive permissions or administrator settings, or modify Secrets. Record access blockers and the specific next step. Keep working on unaffected tasks.
+- Mark every Codex-led PR **AI-assisted implementation** and record its Issue, actual verification and review state. Use the configured Git author and authenticated GitHub identity. Never attribute authorship or approval to someone who did not provide it.
 
-## Architecture and implementation
+## Architecture and evaluation
 
-- Python 3.12, **uv** with `pyproject.toml` and a committed `uv.lock` once D0 creates it. Do not introduce competing package managers in ARC.
-- Modular monolith / Ports & Adapters. `domain` MUST NOT import application, adapters, evaluation or concrete ML frameworks. `application` depends on domain and Ports, not concrete FAISS/bm25s/SentenceTransformers. Build adapters behind Ports and connect at bootstrap.
-- Keep dataset adapters, vertical business rules and offline evaluation separate. **Never allow Qrels/test labels into retrieval requests, query routing, document text or model selection.**
-- Preserve real source IDs; prefer precise, small vertical slices and tests over speculative abstractions. No microservices or multimodal/Agentic features during V0.
+- Use Python 3.12 and uv with the committed lockfile. Read the [engineering design](docs/ENGINEERING.md) and [frozen architecture](docs/architecture/ARC-TECH-001.md) before changing code. Keep the domain independent of application, adapters, evaluation and ML frameworks. Application code uses domain and Ports. Connect concrete adapters at bootstrap.
+- Keep dataset adapters, vertical rules and offline evaluation separate. Preserve source IDs. Never leak Qrels or test labels into requests, routing, document text or model selection. Use dev for decisions and test for final reporting.
+- Read the [evaluation baseline](docs/evaluation/ARC-EVAL-001.md), [experiment protocol](docs/evaluation/ARC-EXP-001.md) and [execution decision](docs/evaluation/ARC-EXP-001-EXECUTION-DECISION.md) together before touching benchmark work. Preserve the WANDS split and explicit disputed-label policy. Under the V0 protocol, E3 and E4 share the same Top-100 entity set per query. Report NDCG@10, observed recall, judged coverage and dataset caveats.
+- Keep private configuration, credentials, server paths, models, raw data and indexes out of Git. Verify dataset licensing before redistribution. Keep GPU drivers and unrelated Docker/Conda environments outside the task.
 
-## Evidence, evaluation and phase gates
+## Acceptance
 
-- Always run relevant tests and lint. Never invent a pass, model quality result, dataset, command execution or GPU benchmark.
-- M0 validates official input sizes, deterministic WANDS 80/400 split, repeated/conflicting labels and hand-verifiable metrics. Refuse to silently resolve label conflicts.
-- For M2, per-query E3/E4 must contain exactly the same Top-100 entity set. Report NDCG@10, observed recall and judged coverage with their dataset caveats.
-- Treat test data as final reporting only; use dev for choices. Report negative findings, costs, incomplete labels and all relevant failures.
-- After a stage genuinely passes, update `PROGRESS.md` with executed commands, evidence paths and commit, then proceed to the next stage. Store concise acceptance reports; keep large/raw data, model weights, sensitive env files and indexes out of Git.
-
-## Safety, Git and external systems
-
-- Do not edit frozen RFC/EVAL/TECH documents in place; document changes in new ADRs, then flag significant conflicts for user approval.
-- Follow [Git Workflow](docs/engineering/GIT_WORKFLOW.md) and commit milestone-sized changes on a safe work branch. Do not force-push, reset user changes, delete remote resources, merge protected branches, rotate credentials, change GPU drivers or modify other Docker/Conda environments.
-- Do not publish private server paths, proxy credentials or tokens to GitHub. Verify dataset licenses before redistribution; default to download scripts rather than committing data.
-- A missing permission, incompatible environment, unavailable official dataset, material specification conflict or irreducible failing acceptance check is `BLOCKED`, not a success. Explain the blocker and exact next authorized step.
-
-## Completion report
-
-At each stage output an evidence-backed PASS/BLOCKED report (files changed, commands, exit codes, results, Git commit, unresolved risks). Final V0 report requires all D0–M3 gates passing. If interrupted, resume from PROGRESS and verify existing artifacts instead of starting over.
+Run relevant tests and lint. Record commands, exit codes, evidence, commit and unresolved limits in the PR and, for milestone acceptance, in a durable report. Report failed and unverified checks and negative experiment findings. Resume from recorded evidence and verify the relevant artifacts against Git history. If a gate is blocked, report the observed cause and exact next step.
