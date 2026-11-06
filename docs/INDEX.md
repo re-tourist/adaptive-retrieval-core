@@ -3,6 +3,7 @@
 V0 的 D0–M3 已验收。以下入口覆盖使用、设计与证据。
 
 - [Quickstart](QUICKSTART.md) · 启动 Playground、CLI、API 和 Docker。
+- [商品 Demo](SHOWCASE.md) · 语料、素材来源和实跑画面。
 - [工程设计](ENGINEERING.md) · 在线检索流程、策略、索引与分数语义。
 - [V0 验收报告](ARC-V0-ACCEPTANCE.md) · 正式结果、时延测量与阶段证据。
 - [复现实验](REPRODUCING.md) · 官方数据、固定模型和复现命令。

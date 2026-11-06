@@ -22,6 +22,11 @@ Target server performance remains BLOCKED because no designated server was avail
 - Implementation `2942a25` on `codex/arc-showcase`.
 - Local wheel, browser, corpus audit and documentation checks passed. The [Showcase report](artifacts/acceptance/showcase/report.md) records commands, results and screenshot provenance. Final platform and container checks are recorded on the Showcase PR.
 
+## Showcase V2
+
+- Runtime `703d8e2` on `codex/arc-showcase-v2` integrates the reviewed design with the live 22-item catalog.
+- Clean CPU wheel, full Dense-dependent suite, catalog and legacy HTTP smoke, browser parity and visual checks passed locally. The [V2 acceptance report](artifacts/acceptance/showcase-v2/report.md) records commands, results, scope and captures. The implementation PR records the final Windows, Ubuntu and Docker checks.
+
 ## Progress entry format (append per stage)
 
 ```text
