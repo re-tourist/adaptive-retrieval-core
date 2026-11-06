@@ -15,7 +15,7 @@
 
 ## Remaining external checks
 
-Target server performance remains BLOCKED because no designated server was available. Local CUDA, localhost HTTP, CPU Docker, and the complete official E1–E4 experiments have independent evidence. The Pre-Goal PR remains Draft after the platform rejected the merge; the development branch uses the reviewed Pre-Goal revision.
+Target server performance remains BLOCKED because no designated server was available. Local CUDA, localhost HTTP, CPU Docker, and the complete official E1–E4 experiments have independent evidence. The development branch started from the reviewed Pre-Goal revision after the initial platform restriction. [Pre-Goal PR #1](https://github.com/re-tourist/adaptive-retrieval-core/pull/1) was later merged.
 
 ## Showcase follow-up
 

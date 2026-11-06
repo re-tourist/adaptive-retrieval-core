@@ -58,4 +58,5 @@ SciFact 全库 5,183 条，使用 809 dev 和 300 test。WANDS 全库 42,994 件
 ## Git 记录
 
 - D0 `ccb402f`，M0 `7845e78`，M1 索引与重放 `141d634`，M2 `4419393`，M3 `b61a801`，最终实现验证 `f99c331`。
-- [Pre-Goal PR #1](https://github.com/re-tourist/adaptive-retrieval-core/pull/1) 仍为 Draft。平台此前拒绝 Ready/合并，开发按批准的备选路径从审核后的提交继续。交付分支为 `codex/v0-development`。
+- [Pre-Goal PR #1](https://github.com/re-tourist/adaptive-retrieval-core/pull/1) 已合并。初次尝试转为 Ready 或合并时受平台限制，开发随后按批准的备选路径从已审核提交继续。
+- [V0 交付 PR #2](https://github.com/re-tourist/adaptive-retrieval-core/pull/2) 从 `codex/v0-development` 合入 `main`，合并提交为 `1c40c7166d383eacc59ae4329f9cdda8b1593bdf`，对应 [v0.1.0](https://github.com/re-tourist/adaptive-retrieval-core/releases/tag/v0.1.0)。后续展示层交付见 [Showcase V2 PR #5](https://github.com/re-tourist/adaptive-retrieval-core/pull/5)。
