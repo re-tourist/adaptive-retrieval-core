@@ -11,38 +11,53 @@
 <body>
   <header class="masthead">
     <div class="wrap bar">
-      <span class="brand"><b>ARC</b> Adaptive Retrieval Core</span>
-      <a href="../docs">API reference ↗</a>
+      <a class="brand" href="./" aria-label="ARC Search Playground home">
+        <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 18a8 8 0 0 1 16 0M8 18a4 4 0 0 1 8 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+        <strong>ARC</strong><span class="brand-label">Search Playground</span>
+      </a>
+      <div class="bar-right"><span id="corpus" class="badge" hidden></span><a href="../docs">API reference <span aria-hidden="true">↗</span></a></div>
     </div>
   </header>
-  <main class="wrap">
-    <div class="intro">
-      <p class="eyebrow">RETRIEVAL WORKBENCH</p>
-      <h1>Search Playground</h1>
-      <p class="subtitle">Run a live query and inspect how ARC ranks its results.</p>
-    </div>
-    <form id="search" class="panel controls" aria-label="Search controls">
-      <label for="query">Query</label>
-      <div class="query-row">
-        <input id="query" name="query" type="search" required maxlength="4096"
-               placeholder="Enter a search query" autocomplete="off">
-        <button id="submit" type="submit" disabled>Run search <span aria-hidden="true">↗</span></button>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div class="wrap intro-inner">
+        <p class="kicker"><span aria-hidden="true"></span> <span id="vertical">SEARCH PLAYGROUND</span></p>
+        <h1 id="page-title">Find the right match.</h1>
+        <p id="lead" class="lead">Search the active ARC corpus in your own words.</p>
+        <form id="search-form" class="searchbox" role="search">
+          <label for="query" class="sr-only">Search the corpus</label>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="10.8" r="5.8"/><path d="m15.2 15.2 4.2 4.2"/></svg>
+          <input id="query" type="search" placeholder="Describe what you’re looking for" required maxlength="4096" autocomplete="off" disabled>
+          <button id="submit" type="submit" disabled>Search</button>
+        </form>
+        <div id="examples" class="examples" aria-label="Example searches" hidden><span>Try</span></div>
       </div>
-      <div id="examples" class="examples" aria-label="Example queries"></div>
-      <div class="selectors">
-        <div><label for="primary">Strategy</label><select id="primary" disabled></select></div>
-        <div><label for="compare">Compare with</label><select id="compare" disabled></select></div>
-        <div><label for="limit">Top K</label>
-          <select id="limit"><option>3</option><option selected>5</option><option>10</option></select>
+    </section>
+    <section class="wrap results" aria-labelledby="results-title">
+      <div class="result-bar">
+        <div>
+          <h2 id="results-title">Search results</h2>
+          <p class="result-meta" id="status" role="status">Connecting to ARC…</p>
+        </div>
+        <div class="view-switch" role="group" aria-label="Result view">
+          <button id="search-view" type="button" aria-pressed="true" disabled>Search</button>
+          <button id="compare-view" type="button" aria-pressed="false" disabled>Compare</button>
         </div>
       </div>
-    </form>
-    <div class="run-info">
-      <p id="status" role="status">Connecting to ARC…</p>
-      <span id="capabilities" class="badge" hidden></span>
-    </div>
-    <section id="results" aria-label="Search results" aria-busy="false"></section>
-    <p class="footnote">Scores use strategy-specific scales. Compare ranks and entity IDs across strategies.</p>
+      <div id="strategies" class="strategy-row" hidden>
+        <label>Strategy <select id="primary"></select></label>
+        <label id="second-control" hidden>Compare with <select id="secondary"></select></label>
+      </div>
+      <div id="catalog" aria-busy="false"></div>
+      <details id="diagnostics" class="diagnostics" hidden>
+        <summary>Retrieval details</summary>
+        <div id="trace"></div>
+      </details>
+      <footer class="notice">
+        <span id="provenance"></span>
+        <span id="availability" hidden>Compare requires a second strategy. Configure a BGE model and a compatible index to enable Dense and Hybrid.</span>
+      </footer>
+    </section>
   </main>
 </body>
 </html>

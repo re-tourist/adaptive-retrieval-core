@@ -30,5 +30,7 @@ jobs:
         run: |
           docker image inspect arc:v0 --format '{{.Id}} {{.Size}}'
           docker run -d --name arc-smoke -p 127.0.0.1:8080:8000 arc:v0
-          trap 'docker logs arc-smoke || true; docker rm -f arc-smoke' EXIT
+          trap 'docker logs arc-smoke || true; docker logs arc-catalog || true; docker rm -f arc-smoke arc-catalog' EXIT
+          docker run -d --name arc-catalog -e ARC_DATASET=catalog -p 127.0.0.1:8081:8000 arc:v0
           python3 scripts/container-smoke.py http://127.0.0.1:8080
+          python3 scripts/container-smoke.py http://127.0.0.1:8081 --catalog

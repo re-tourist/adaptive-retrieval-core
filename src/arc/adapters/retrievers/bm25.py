@@ -23,14 +23,16 @@ def tokenize(text: str) -> list[str]:
 
 
 class BM25Retriever:
-    def __init__(self, corpus: Corpus, fingerprint: str) -> None:
+    def __init__(self, corpus: Corpus, fingerprint: str, *, require_match: bool = False) -> None:
         self.units = tuple(sorted(corpus.units, key=lambda unit: unit.unit_id))
         self.domain = self.units[0].entity_key.domain
         if any(unit.entity_key.domain != self.domain for unit in self.units):
             raise ValueError("BM25 snapshot must contain one domain")
         self.index = bm25s.BM25(k1=CONFIG["k1"], b=CONFIG["b"], method=CONFIG["method"])
         self.index.index([tokenize(unit.text) for unit in self.units], show_progress=False)
-        config_hash = sha256(repr(CONFIG).encode()).hexdigest()
+        self.require_match = require_match
+        config = {**CONFIG, "require_match": True} if require_match else CONFIG
+        config_hash = sha256(repr(config).encode()).hexdigest()
         compatibility = IndexCompatibility(fingerprint, "bm25", "1")
         self.manifest = IndexManifest(
             f"bm25-{fingerprint}-{config_hash}",
@@ -60,7 +62,11 @@ class BM25Retriever:
             return ()
         tokens = tokenize(query)
         if not tokens:
+            if self.require_match:
+                return ()
             return tuple(Candidate(unit, 0.0) for unit in (self.units[i] for i in eligible[:limit]))
         scores = self.index.get_scores(tokens)
+        if self.require_match:
+            eligible = [i for i in eligible if scores[i] > 0]
         order = sorted(eligible, key=lambda i: (-float(scores[i]), self.units[i].unit_id))
         return tuple(Candidate(self.units[i], float(scores[i])) for i in order[:limit])

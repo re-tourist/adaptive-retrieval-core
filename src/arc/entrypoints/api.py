@@ -33,7 +33,9 @@ class Request(BaseModel):
     snapshot_id: str | None = Field(default=None, max_length=256)
 
 
-def create_app(harness: SearchHarness, *, corpus_name: str | None = None) -> FastAPI:
+def create_app(
+    harness: SearchHarness, *, corpus_name: str | None = None, products: dict | None = None
+) -> FastAPI:
     app = FastAPI(title="ARC", version="0.1.0")
 
     @app.get("/healthz")
@@ -42,7 +44,10 @@ def create_app(harness: SearchHarness, *, corpus_name: str | None = None) -> Fas
 
     @app.get("/playground/config", include_in_schema=False)
     def playground_config() -> dict:
-        return {**health(), "corpus": corpus_name}
+        config = {**health(), "corpus": corpus_name}
+        if products is not None:
+            config["products"] = products
+        return config
 
     app.mount(
         "/playground",
@@ -76,4 +81,10 @@ def create_app(harness: SearchHarness, *, corpus_name: str | None = None) -> Fas
 
 
 def factory() -> FastAPI:
-    return create_app(configured_harness(), corpus_name=os.getenv("ARC_DATASET", "demo"))
+    dataset = os.getenv("ARC_DATASET", "demo")
+    products = None
+    if dataset == "catalog":
+        from arc.adapters.datasets.catalog import catalog_cards
+
+        products = catalog_cards()
+    return create_app(configured_harness(), corpus_name=dataset, products=products)
